@@ -1,4 +1,5 @@
 require 'time'
+require 'bigdecimal'
 
 class InvoiceItem
   attr_reader :id,
@@ -14,7 +15,7 @@ class InvoiceItem
     @item = data[:item]
     @invoice_id = data[:invoice_id]
     @quantity = data[:quantity]
-    @unit_price = data[:unit_price]
+    @unit_price = BigDecimal.new(data[:unit_price]) / 100.0
     @created_at = Time.parse(data[:created_at])
     @updated_at = Time.parse(data[:updated_at])
   end
