@@ -20,7 +20,7 @@ class Invoice
   end
 
   def merchant
-    invoice_repo.sales_engine.merchants.find_by_id(merchant_id)
+    invoice_repo.find_merchant_for_a_invoice(merchant_id)
   end
 
   def update_updated_time
@@ -47,18 +47,17 @@ class Invoice
   end
 
   def transactions
-    @invoice_repo.sales_engine.transactions.find_all_by_invoice_id(id)
+    @invoice_repo.find_transactions_for_a_invoice(id)
   end
 
 
   def customer
-    @invoice_repo.sales_engine.customers.find_by_id(customer_id)
+    @invoice_repo.find_customer_of_a_invoice(customer_id)
   end
 
   def is_paid_in_full?
-    a = @invoice_repo.sales_engine.transactions.find_all_by_invoice_id(id)
-    a.any? do |transaction|
-      transaction.result == :success #&& transaction.result != :returned
+    transactions.any? do |transaction|
+      transaction.result == :success 
     end
   end
 
