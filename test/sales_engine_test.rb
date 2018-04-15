@@ -15,6 +15,4 @@ class SalesEngineTest<Minitest::Test
 
     assert_instance_of SalesAnalyst, sales_analyst
   end
-
-
 end
