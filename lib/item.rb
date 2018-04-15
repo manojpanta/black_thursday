@@ -26,7 +26,7 @@ class Item
   end
 
   def merchant
-    item_repo.sales_engine.merchants.find_by_id(merchant_id)
+    item_repo.find_merchant_of_a_item(merchant_id)
   end
 
   def update_updated_at

@@ -1,7 +1,5 @@
-require 'minitest/autorun'
-require 'minitest/pride'
+require_relative 'test_helper'
 require './lib/invoice_item_repository'
-require 'time'
 
 class InvoiceItemRepositoryTest < Minitest::Test
   def test_exists
@@ -123,7 +121,7 @@ class InvoiceItemRepositoryTest < Minitest::Test
                   })
 
 
-    assert_equal 2, result.item_id
+    assert_equal 263539664, result.item_id
     assert_equal 1000, result.invoice_id
     assert_equal 4, result.quantity
     assert_equal 1600, result.unit_price

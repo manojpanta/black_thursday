@@ -1,5 +1,6 @@
 require 'csv'
 require_relative 'invoice'
+require 'time'
 
 class InvoiceRepository
   attr_reader :path,
@@ -9,7 +10,7 @@ class InvoiceRepository
   def initialize(path, sales_engine)
     @sales_engine ||= sales_engine
     @path = path
-    @invoices = []
+    @invoices ||= []
     load_path(path)
   end
 
@@ -69,6 +70,24 @@ class InvoiceRepository
 
   def delete(id)
     @invoices.delete(find_by_id(id))
+  end
+
+  def total_invoices_for_a_date(date)
+    @invoices.map do |invoice|
+      invoice if invoice.created_at == date
+    end.compact
+  end
+
+  def find_merchant_for_a_invoice(merchant_id)
+    sales_engine.find_merchant_for_a_invoice(merchant_id)
+  end
+
+  def find_transactions_for_a_invoice(invoice_id)
+    sales_engine.find_transactions_for_a_invoice(invoice_id)
+  end
+
+  def find_customer_of_a_invoice(customer_id)
+    sales_engine.find_customer_of_a_invoice(customer_id)
   end
 
   def inspect

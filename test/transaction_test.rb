@@ -1,7 +1,5 @@
-require 'minitest/autorun'
-require 'minitest/pride'
+require_relative 'test_helper'
 require './lib/transaction'
-require 'time'
 
 
 class TransactionTest < Minitest::Test
@@ -33,6 +31,4 @@ class TransactionTest < Minitest::Test
     assert_equal "0220", transaction.credit_card_expiration_date
     assert_equal "success", transaction.result
     end
-
-
 end

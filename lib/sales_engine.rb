@@ -31,4 +31,36 @@ class SalesEngine
   def analyst
     SalesAnalyst.new(self)
   end
+
+  def invoices_for_merchant(id)
+    invoices.find_all_by_merchant_id(id)
+  end
+
+  def items_for_a_merchant(merchant_id)
+    items.find_all_by_merchant_id(merchant_id)
+  end
+
+  def find_customers_for_a_merchant(customer_id)
+    customers.find_by_id(customer_id)
+  end
+
+  def find_merchant_for_a_invoice(merchant_id)
+    merchants.find_by_id(merchant_id)
+  end
+
+  def find_merchant_of_a_item(merchant_id)
+    merchants.find_by_id(merchant_id)
+  end
+
+  def find_transactions_for_a_invoice(invoice_id)
+    transactions.find_all_by_invoice_id(invoice_id)
+  end
+
+  def find_customer_of_a_invoice(customer_id)
+    customers.find_by_id(customer_id)
+  end
+
+  def find_invoice_for_a_transaction(invoice_id)
+    invoices.find_by_id(invoice_id)
+  end
 end

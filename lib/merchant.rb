@@ -13,11 +13,11 @@ class Merchant
   end
 
   def items
-    merchant_repo.sales_engine.items.find_all_by_merchant_id(id)
+    @merchant_repo.items_for_a_merchant(id)
   end
 
   def invoices
-    merchant_repo.sales_engine.invoices.find_all_by_merchant_id(id)
+    @merchant_repo.invoices_for_merchant(id)
   end
 
   def change_update_time
@@ -28,10 +28,16 @@ class Merchant
     @name = name
   end
 
-  def customers
-    invoices = @merchant_repo.sales_engine.invoices.find_all_by_merchant_id(id)
+  def revenue
     invoices.map do |invoice|
-      @merchant_repo.sales_engine.customers.find_by_id(invoice.customer_id)
+      invoice.invoice_total(invoice.id)
+    end.compact.reduce(0, :+)
+  end
+
+  def customers
+    invoices = invoices
+    invoices.map do |invoice|
+      @merchant_repo.find_customer_for_a_merchant(invoice.customer_id)
     end.uniq
   end
 end

@@ -1,7 +1,6 @@
 # SalesAnalyst
 require_relative 'sales_engine'
 class SalesAnalyst
-
   attr_reader :merchant_repo,
               :item_repo,
               :invoice_repo,
@@ -60,7 +59,7 @@ class SalesAnalyst
 
   def standard_deviation_for_item_price
     average_price = average_price_of_items
-    a = @item_repo.items.reduce(0) do |sum , item|
+    a = @item_repo.items.reduce(0) do |sum, item|
       sum + (item.unit_price - average_price) ** 2
     end / (@item_repo.items.count - 1)
     Math.sqrt(a).round(2)
@@ -137,14 +136,58 @@ class SalesAnalyst
   end
 
   def invoice_paid_in_full?(invoice_id)
-    @transaction_repo.find_all_by_invoice_id(invoice_id).all? do|transaction|
-      transaction.result == "success"
+    @transaction_repo.find_all_by_invoice_id(invoice_id).any? do |transaction|
+      transaction.result == :success
     end
   end
 
   def invoice_total(invoice_id)
-    @invoice_item_repo.find_all_by_invoice_id(invoice_id).reduce(0) do|sum,invoice_item|
+    @invoice_item_repo.find_all_by_invoice_id(invoice_id).reduce(0) do |sum,invoice_item|
       sum + (invoice_item.quantity * invoice_item.unit_price)
     end
   end
+
+  def total_revenue_by_date(date)
+    invoices = invoice_repo.total_invoices_for_a_date(date)
+    invoices.reduce(0) do |total, invoice|
+      total + invoice_total(invoice.id)
+    end
+  end
+
+  def merchants_ranked_by_revenue
+    merchant_repo.merchants.sort_by do |merchant|
+      merchant.revenue
+    end.reverse
+  end
+
+  def top_revenue_earners(number = 20)
+    merchants_ranked_by_revenue[0..(number - 1)]
+  end
+
+  def merchants_with_pending_invoices
+    invoice_repo.invoices.map do |invoice|
+      merchant_repo.find_by_id(invoice.merchant_id) if !invoice.is_paid_in_full?
+    end.compact.uniq
+  end
+
+  def merchants_with_only_one_item
+    merchant_repo.merchants.map do |merchant|
+      merchant if merchant.items.count == 1
+    end.compact
+  end
+
+  def revenue_by_merchant(merchant_id)
+    merchant_repo.find_by_id(merchant_id).revenue
+  end
+
+  def most_sold_item_for_merchant(merchant_id)
+    array = merchant_repo.find_by_id(merchant_id).invoices
+    array.map do |invoice|
+      invoice_item_repo.find_all_by_invoice_id(invoice.id)
+    end.group_by do |iI|
+      iI.item_id
+    end
+  end
+
+
 end
