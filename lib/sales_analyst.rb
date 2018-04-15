@@ -1,5 +1,6 @@
 # SalesAnalyst
 require_relative 'sales_engine'
+require 'time'
 class SalesAnalyst
   attr_reader :merchant_repo,
               :item_repo,
@@ -176,6 +177,13 @@ class SalesAnalyst
     end.compact
   end
 
+  def merchants_with_only_one_item_registered_in_month(month)
+    merchants_by_month = merchants_with_only_one_item.group_by do |merchant|
+      Time.parse(merchant.created_at).strftime("%B")
+    end
+    merchants_with_month[month]
+  end
+
   def revenue_by_merchant(merchant_id)
     merchant_repo.find_by_id(merchant_id).revenue
   end
@@ -188,6 +196,4 @@ class SalesAnalyst
       iI.item_id
     end
   end
-
-
 end

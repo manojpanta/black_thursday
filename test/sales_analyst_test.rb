@@ -351,7 +351,6 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_it_can_find_merchants_with_only_one_item_registered_in_month
-    skip
     se = SalesEngine.new( { :items => './test/fixtures/items.csv',
       :merchants => './test/fixtures/merchants.csv',
       :invoices => './test/fixtures/invoices.csv',
@@ -360,7 +359,7 @@ class SalesAnalystTest < Minitest::Test
       :customers => './test/fixtures/customers.csv'
       })
     sales_analyst = SalesAnalyst.new(se)
-    result = sales_analyst.merchants_with_only_one_item_registered_in_month
+    result = sales_analyst.merchants_with_only_one_item_registered_in_month("May")
 
     assert_equal [], result
   end
