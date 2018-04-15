@@ -44,6 +44,23 @@ class SalesEngine
     customers.find_by_id(customer_id)
   end
 
+  def find_merchant_for_a_invoice(merchant_id)
+    merchants.find_by_id(merchant_id)
+  end
 
+  def find_merchant_of_a_item(merchant_id)
+    merchants.find_by_id(merchant_id)
+  end
 
+  def find_transactions_for_a_invoice(invoice_id)
+    transactions.find_all_by_invoice_id(invoice_id)
+  end
+
+  def find_customer_of_a_invoice(customer_id)
+    customers.find_by_id(customer_id)
+  end
+
+  def find_invoice_for_a_transaction(invoice_id)
+    invoices.find_by_id(invoice_id)
+  end
 end

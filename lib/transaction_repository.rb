@@ -73,6 +73,10 @@ class TransactionRepository
     @transactions.delete(find_by_id(id))
   end
 
+  def find_invoice_for_a_transaction(invoice_id)
+    sales_engine.find_invoice_for_a_transaction(invoice_id)
+  end
+
   def inspect
     "#<#{self.class} #{@transactions.size} rows>"
   end

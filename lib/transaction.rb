@@ -38,6 +38,6 @@ class Transaction
   end
 
   def invoice
-    @transaction_repo.sales_engine.invoices.find_by_id(invoice_id)
+    @transaction_repo.find_invoice_for_a_transaction(invoice_id)
   end
 end

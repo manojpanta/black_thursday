@@ -78,6 +78,18 @@ class InvoiceRepository
     end.compact
   end
 
+  def find_merchant_for_a_invoice(merchant_id)
+    sales_engine.find_merchant_for_a_invoice(merchant_id)
+  end
+
+  def find_transactions_for_a_invoice(invoice_id)
+    sales_engine.find_transactions_for_a_invoice(invoice_id)
+  end
+
+  def find_customer_of_a_invoice(customer_id)
+    sales_engine.find_customer_of_a_invoice(customer_id)
+  end
+
   def inspect
     "#<#{self.class} #{@invoices.size} rows>"
   end
