@@ -10,7 +10,7 @@ class MerchantRepository
               :sales_engine
 
   def initialize(path, sales_engine)
-    @merchants = []
+    @merchants ||= []
     @path = path
     @sales_engine ||= sales_engine
     load_path(path)
@@ -70,5 +70,17 @@ class MerchantRepository
 
   def inspect
     "#<#{self.class} #{@merchants.size} rows>"
+  end
+
+  def invoices_for_merchant(id)
+    sales_engine.invoices_for_merchant(id)
+  end
+
+  def items_for_a_merchant(merchant_id)
+    sales_engine.items_for_a_merchant(merchant_id)
+  end
+
+  def find_customers_for_a_merchant(customer_id)
+    sales_engine.find_customers_for_a_merchant(customer_id)
   end
 end
