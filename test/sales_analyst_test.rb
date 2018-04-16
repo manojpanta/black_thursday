@@ -384,7 +384,20 @@ class SalesAnalystTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv'
                           })
     sales_analyst = SalesAnalyst.new(se)
-    result = []
-    assert_equal 0 , sales_analyst.most_sold_item_for_merchant(12335955)
+    result = sales_analyst.most_sold_item_for_merchant(12335150)
+    assert_equal "Mounted Stag Picture" , result.first.name
+  end
+  
+  def test_it_can_return_most_sold_item_for_merchant
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    sales_analyst = SalesAnalyst.new(se)
+    result = sales_analyst.most_sold_item_for_merchant(12335150)
+    assert_equal "Mounted Stag Picture" , result.first.name
   end
 end
