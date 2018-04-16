@@ -7,8 +7,6 @@ class Invoice
               :created_at,
               :updated_at,
               :invoice_repo
-
-
   def initialize(data, invoice_repo)
     @invoice_repo = invoice_repo
     @id = data[:id].to_i
@@ -49,7 +47,6 @@ class Invoice
   def transactions
     @invoice_repo.find_transactions_for_a_invoice(id)
   end
-
 
   def customer
     @invoice_repo.find_customer_of_a_invoice(customer_id)

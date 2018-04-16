@@ -11,7 +11,7 @@ class InvoiceRepository
     @sales_engine ||= sales_engine
     @path = path
     @invoices = {}
-    @merchant_ids = Hash.new{|h, k| h[k] = []}
+    @merchant_ids = Hash.new { |h, k| h[k] = [] }
     load_path(path)
   end
 

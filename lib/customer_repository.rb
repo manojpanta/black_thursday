@@ -58,10 +58,10 @@ class CustomerRepository
 
   def update(id, attribute)
     return nil if find_by_id(id).nil?
-    to_update = find_by_id(id)
-    to_update.update_updated_time
-    to_update.update_first_name(attribute[:first_name]) if attribute[:first_name]
-    to_update.update_last_name(attribute[:last_name]) if attribute[:last_name]
+    customer = find_by_id(id)
+    customer.update_updated_time
+    customer.update_first_name(attribute[:first_name]) if attribute[:first_name]
+    customer.update_last_name(attribute[:last_name]) if attribute[:last_name]
   end
 
   def delete(id)

@@ -51,11 +51,12 @@ class InvoiceItemRepository
   end
 
   def update(id, attributes)
-    return nil if  find_by_id(id).nil?
+    return nil if find_by_id(id).nil?
     to_update = find_by_id(id)
+    price = :unit_price
     to_update.update_updated_at
     to_update.update_quantity(attributes[:quantity]) if attributes[:quantity]
-    to_update.update_unit_price(attributes[:unit_price]) if attributes[:unit_price]
+    to_update.update_unit_price(attributes[price]) if attributes[price]
   end
 
   def delete(id)

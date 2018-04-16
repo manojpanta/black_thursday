@@ -60,12 +60,14 @@ class TransactionRepository
   end
 
   def update(id, attributes)
+    ccn = :credit_card_number
+    cce = :credit_card_expiration_date
     return nil if find_by_id(id).nil?
-    to_update = find_by_id(id)
-    to_update.update_updated_at
-    to_update.update_credit_card_number(attributes[:credit_card_number]) if attributes[:credit_card_number]
-    to_update.update_credit_card_expiration_date(attributes[:credit_card_expiration_date]) if attributes[:credit_card_expiration_date]
-    to_update.update_result(attributes[:result]) if attributes[:result]
+    find = find_by_id(id)
+    find.update_updated_at
+    find.update_credit_card_number(attributes[ccn]) if attributes[ccn]
+    find.update_credit_card_expiration_date(attributes[cce]) if attributes[cce]
+    find.update_result(attributes[:result]) if attributes[:result]
   end
 
   def delete(id)
