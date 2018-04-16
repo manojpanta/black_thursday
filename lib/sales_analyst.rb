@@ -47,7 +47,7 @@ class SalesAnalyst
   end
 
   def average_average_price_per_merchant
-    @merchant_repo.merchants.reduce(0) do |sum, merchant|
+    @merchant_repo.all.reduce(0) do |sum, merchant|
       sum + average_item_price_for_merchant(merchant.id) / @merchant_repo.merchants.count
     end.round(2)
   end
@@ -84,7 +84,7 @@ class SalesAnalyst
   def average_invoices_per_merchant_standard_deviation
     a = average_invoices_per_merchant
     numbers_of_merchants = @merchant_repo.merchants.count
-    a = @merchant_repo.merchants.reduce(0) do |sum, merchant|
+    a = @merchant_repo.all.reduce(0) do |sum, merchant|
       sum + (merchant.invoices.count - a) ** 2
     end / (numbers_of_merchants - 1)
     Math.sqrt(a).round(2)
@@ -92,14 +92,14 @@ class SalesAnalyst
 
   def top_merchants_by_invoice_count
     two_standard_deviation = average_invoices_per_merchant + (average_invoices_per_merchant_standard_deviation * 2)
-    @merchant_repo.merchants.map do |merchant|
+    @merchant_repo.all.map do |merchant|
       merchant if merchant.invoices.count > two_standard_deviation
     end.compact
   end
 
   def bottom_merchants_by_invoice_count
     two_standard_deviation = average_invoices_per_merchant - (average_invoices_per_merchant_standard_deviation * 2)
-    @merchant_repo.merchants.map do |merchant|
+    @merchant_repo.all.map do |merchant|
       merchant if merchant.invoices.count < two_standard_deviation
     end.compact
   end
@@ -157,7 +157,7 @@ class SalesAnalyst
   end
 
   def merchants_ranked_by_revenue
-    merchant_repo.merchants.sort_by do |merchant|
+    merchant_repo.all.sort_by do |merchant|
       merchant.revenue
     end.reverse
   end
@@ -167,13 +167,13 @@ class SalesAnalyst
   end
 
   def merchants_with_pending_invoices
-    invoice_repo.invoices.map do |invoice|
+    invoice_repo.all.map do |invoice|
       merchant_repo.find_by_id(invoice.merchant_id) if !invoice.is_paid_in_full?
     end.compact.uniq
   end
 
   def merchants_with_only_one_item
-    merchant_repo.merchants.map do |merchant|
+    merchant_repo.all.map do |merchant|
       merchant if merchant.items.count == 1
     end.compact
   end
