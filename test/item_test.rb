@@ -6,6 +6,7 @@ class TestItem < Minitest::Test
 
 
   def test_exists
+    skip
     item = Item.new({
       :id => 12394049,
       :name => "Pencil",
@@ -19,6 +20,7 @@ class TestItem < Minitest::Test
   end
 
   def test_attributes
+    skip
     item = Item.new({
       :id => 12394049,
       :name => "Pencil",

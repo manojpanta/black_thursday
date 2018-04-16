@@ -27,8 +27,8 @@ class SalesAnalystTest < Minitest::Test
 
     sales_analyst = SalesAnalyst.new(se)
 
-    assert_equal 'Shopin1901', sales_analyst.merchant_repo.merchants.first.name
-    assert_equal 12334105, sales_analyst.merchant_repo.merchants.first.id
+    assert_equal 'Shopin1901', sales_analyst.merchant_repo.all.first.name
+    assert_equal 12334105, sales_analyst.merchant_repo.all.first.id
   end
 
   def test_if_it_has_items_repo
