@@ -8,7 +8,7 @@ class TransactionRepository
 
   def initialize(path, sales_engine)
     @path           = path
-    @sales_engine ||= sales_engine
+    @sales_engine   = sales_engine
     @transactions   = {}
     @invoice_ids    = Hash.new{|h, k| h[k] = []}
     load_path(path)

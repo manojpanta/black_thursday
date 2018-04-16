@@ -8,9 +8,9 @@ class CustomerRepository
               :sales_engine
 
   def initialize(path, sales_engine)
-    @customers    ||= []
-    @path           = path
-    @sales_engine ||= sales_engine
+    @customers    = []
+    @path         = path
+    @sales_engine = sales_engine
     load_path(path)
   end
 

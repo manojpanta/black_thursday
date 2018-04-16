@@ -8,7 +8,7 @@ class ItemRepository
 
   def initialize(path, sales_engine)
     @items          = []
-    @sales_engine ||= sales_engine
+    @sales_engine   = sales_engine
     load_path(path)
   end
 
