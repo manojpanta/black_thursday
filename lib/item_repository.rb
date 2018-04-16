@@ -70,6 +70,7 @@ class ItemRepository
     attributes[:created_at] = Time.now.to_s
     attributes[:updated_at] = Time.now.to_s
     @items << Item.new(attributes,self)
+    Item.new(attributes,self)
   end
 
   def update(id, attributes)

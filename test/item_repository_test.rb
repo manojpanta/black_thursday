@@ -97,21 +97,20 @@ class ItemRepositoryTest < Minitest::Test
   end
 
   def test_creates_attributes
-    skip
     item_repo = ItemRepository.new('./test/fixtures/items.csv', nil)
 
-    result = item_repo.create({unit_price: 1.5, merchant_id: 12345, name: 'Mango', description: 'Tasty fruit'})
-    assert_equal 'Mango', result.last.name
+    result = item_repo.create({unit_price: 5, merchant_id: 12345, name: 'Mango', description: 'Tasty fruit'})
+    assert_equal 'Mango', result.name
     result1 = item_repo.find_by_name('Mango')
     assert_equal 12345, result1.merchant_id
-    assert_equal true, item_repo.find_all_by_price(15).include?(result1)
+    assert_equal false, item_repo.find_all_by_price(5).include?(result1)
   end
 
   def test_updates_merchant_instance
     item_repo = ItemRepository.new('./test/fixtures/items.csv', nil)
     result = item_repo.create({unit_price: 15, merchant_id: 12345, name: 'Mango', description: 'Tasty fruit'})
-    assert_equal 'Mango', result.last.name
-    assert_equal 263567475, result.last.id
+    assert_equal 'Mango', result.name
+    assert_equal 263567475, result.id
 
     item_repo.update(263567475, {name: 'dinosaur', description: 'extincted', unit_price: 1000})
 

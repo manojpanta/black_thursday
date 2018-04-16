@@ -51,6 +51,7 @@ class TransactionRepositoryTest < Minitest::Test
     assert_equal 'Nader', result.first.last_name
     assert_equal 5, result.first.id
   end
+  
   def test_it_returns_empty_array_for_invalid_first_name
     cr = CustomerRepository.new('./test/fixtures/customers.csv', nil)
 
