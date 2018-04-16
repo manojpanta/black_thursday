@@ -27,8 +27,8 @@ class SalesAnalystTest < Minitest::Test
 
     sales_analyst = SalesAnalyst.new(se)
 
-    assert_equal 'Shopin1901', sales_analyst.merchant_repo.merchants.first.name
-    assert_equal 12334105, sales_analyst.merchant_repo.merchants.first.id
+    assert_equal 'Shopin1901', sales_analyst.merchant_repo.all.first.name
+    assert_equal 12334105, sales_analyst.merchant_repo.all.first.id
   end
 
   def test_if_it_has_items_repo
@@ -384,7 +384,20 @@ class SalesAnalystTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv'
                           })
     sales_analyst = SalesAnalyst.new(se)
-    result = {}
-    assert_equal result, sales_analyst.most_sold_item_for_merchant(12334132)
+    result = sales_analyst.most_sold_item_for_merchant(12335150)
+    assert_equal "Mounted Stag Picture" , result.first.name
+  end
+
+  def test_it_can_return_best_item_for_a_merchant
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    sales_analyst = SalesAnalyst.new(se)
+    result = sales_analyst.best_item_for_merchant(12335150)
+    assert_equal "Sale Timberland Tee Shirt For Kids" , result.name
   end
 end

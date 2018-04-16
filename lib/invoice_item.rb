@@ -37,4 +37,8 @@ class InvoiceItem
   def update_quantity(quantity)
     @quantity = quantity
   end
+
+  def revenue_out_of_one_invoice_item
+    quantity * unit_price
+  end
 end

@@ -9,46 +9,45 @@ class TransactionRepository
   def initialize(path, sales_engine)
     @path = path
     @sales_engine ||= sales_engine
-    @transactions ||= []
+    @transactions = {}
+    @invoice_ids = Hash.new{|h, k| h[k] = []}
     load_path(path)
   end
 
   def all
-    @transactions
+    @transactions.values
   end
 
   def load_path(path)
     CSV.foreach(path, headers: true, header_converters: :symbol) do |data|
-      @transactions << Transaction.new(data, self)
+      transaction = Transaction.new(data, self)
+      @transactions[transaction.id] = transaction
+      @invoice_ids[transaction.invoice_id] << transaction
     end
   end
 
   def find_by_id(id)
-    @transactions.find do |transaction|
-      transaction.id == id
-    end
+    @transactions[id]
   end
 
   def find_all_by_invoice_id(id)
-    @transactions.find_all do |transaction|
-      transaction.invoice_id == id
-    end
+    @invoice_ids[id]
   end
 
   def find_all_by_credit_card_number(card_number)
-    @transactions.find_all do |transaction|
+    all.find_all do |transaction|
       transaction.credit_card_number == card_number
     end
   end
 
   def find_all_by_result(result)
-    @transactions.find_all do |transaction|
+    all.find_all do |transaction|
       transaction.result == result
     end
   end
 
   def create_new_id
-    @transactions.map do |transaction|
+    all.map do |transaction|
       transaction.id
     end.max + 1
   end
@@ -57,7 +56,7 @@ class TransactionRepository
     attributes[:id] = create_new_id
     attributes[:created_at] = Time.now.strftime('%F')
     attributes[:updated_at] = Time.now.strftime('%F')
-    @transactions << Transaction.new(attributes, self)
+    @transactions[attributes[:id]] = Transaction.new(attributes, self)
   end
 
   def update(id, attributes)
@@ -70,7 +69,7 @@ class TransactionRepository
   end
 
   def delete(id)
-    @transactions.delete(find_by_id(id))
+    @transactions.delete(id)
   end
 
   def find_invoice_for_a_transaction(invoice_id)

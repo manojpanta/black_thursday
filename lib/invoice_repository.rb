@@ -10,46 +10,45 @@ class InvoiceRepository
   def initialize(path, sales_engine)
     @sales_engine ||= sales_engine
     @path = path
-    @invoices ||= []
+    @invoices = {}
+    @merchant_ids = Hash.new{|h, k| h[k] = []}
     load_path(path)
   end
 
   def load_path(path)
     CSV.foreach(path, headers: true, header_converters: :symbol) do |data|
-      @invoices << Invoice.new(data, self)
+      invoice = Invoice.new(data, self)
+      @invoices[invoice.id] = invoice
+      @merchant_ids[invoice.merchant_id] << invoice
     end
   end
 
   def all
-    @invoices
+    @invoices.values
   end
 
   def find_by_id(id)
-    @invoices.find do |invoice|
-      invoice.id == id.to_i
-    end
+    @invoices[id]
   end
 
   def find_all_by_customer_id(customer_id)
-    @invoices.find_all do |invoice|
+    all.find_all do |invoice|
       invoice.customer_id == customer_id
     end
   end
 
   def find_all_by_merchant_id(merchant_id)
-    @invoices.find_all do |invoice|
-      invoice.merchant_id == merchant_id
-    end
+    @merchant_ids[merchant_id]
   end
 
   def find_all_by_status(status)
-    @invoices.find_all do |invoice|
+    all.find_all do |invoice|
       invoice.status == status
     end
   end
 
   def create_new_id
-    @invoices.map do |invoice|
+    all.map do |invoice|
       invoice.id
     end.max + 1
   end
@@ -58,7 +57,7 @@ class InvoiceRepository
     attributes[:id] = create_new_id
     attributes[:created_at] = Time.now.strftime('%F')
     attributes[:updated_at] = Time.now.strftime('%F')
-    @invoices << Invoice.new(attributes, self)
+    @invoices[attributes[:id]] = Invoice.new(attributes, self)
   end
 
   def update(id, attributes)
@@ -69,11 +68,11 @@ class InvoiceRepository
   end
 
   def delete(id)
-    @invoices.delete(find_by_id(id))
+    @invoices.delete(id)
   end
 
   def total_invoices_for_a_date(date)
-    @invoices.map do |invoice|
+    all.map do |invoice|
       invoice if invoice.created_at == date
     end.compact
   end
@@ -88,6 +87,10 @@ class InvoiceRepository
 
   def find_customer_of_a_invoice(customer_id)
     sales_engine.find_customer_of_a_invoice(customer_id)
+  end
+
+  def find_invoice_item_for_a_invoice(id)
+    sales_engine.find_invoice_item_for_a_invoice(id)
   end
 
   def inspect

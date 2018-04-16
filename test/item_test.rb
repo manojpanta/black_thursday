@@ -11,8 +11,8 @@ class TestItem < Minitest::Test
       :name => "Pencil",
       :description => "Writes stuff",
       :unit_price => BigDecimal(10.99, 4),
-      :created_at => Time.now,
-      :updated_at => Time.now
+      :created_at => Time.now.to_s,
+      :updated_at => Time.now.to_s
       }, nil)
 
       assert_instance_of Item, item
@@ -24,8 +24,8 @@ class TestItem < Minitest::Test
       :name => "Pencil",
       :description => "Writes stuff",
       :unit_price => BigDecimal(10.99, 4),
-      :created_at => Time.now,
-      :updated_at => Time.now
+      :created_at => Time.now.to_s,
+      :updated_at => Time.now.to_s
       }, nil)
 
     assert_equal 12394049, item.id

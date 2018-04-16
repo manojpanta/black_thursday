@@ -57,18 +57,13 @@ class Invoice
 
   def is_paid_in_full?
     transactions.any? do |transaction|
-      transaction.result == :success 
+      transaction.result == :success
     end
   end
 
   def invoice_total(id)
-    invoice_repo.sales_engine.invoice_items.find_all_by_invoice_id(id).reduce(0) do |sum, invoice_item|
-      sum + (invoice_item.quantity * invoice_item.unit_price) if is_paid_in_full?
-    end
-  end
-
-  def total
-    @invoice_repo.sales_engine.invoice_items.find_all_by_invoice_id(id).reduce(0) do |sum, invoice_item|
+    invoice_items = invoice_repo.find_invoice_item_for_a_invoice(id)
+    invoice_items.reduce(0) do |sum, invoice_item|
       sum + (invoice_item.quantity * invoice_item.unit_price) if is_paid_in_full?
     end
   end

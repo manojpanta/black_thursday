@@ -10,42 +10,43 @@ class MerchantRepository
               :sales_engine
 
   def initialize(path, sales_engine)
-    @merchants ||= []
+    @merchants = {}
+    @merchant_names = Hash.new{|h, k| h[k] = []}
     @path = path
-    @sales_engine ||= sales_engine
+    @sales_engine = sales_engine
     load_path(path)
   end
 
   def all
-    @merchants
+    @merchants.values
   end
 
   def load_path(path)
     CSV.foreach(path, headers: true, header_converters: :symbol) do |data|
-      @merchants << Merchant.new(data, self)
+      merchant = Merchant.new(data, self)
+      @merchants[merchant.id] = merchant
+      @merchant_names[merchant.name.downcase] << merchant
     end
   end
 
   def find_by_id(id)
-    @merchants.find do |merchant|
-      merchant.id == id.to_i
-    end
+    @merchants[id]
   end
 
   def find_by_name(name)
-    @merchants.find do |merchant|
+    all.find do |merchant|
       merchant.name.downcase == name.downcase
     end
   end
 
   def find_all_by_name(name)
-    @merchants.find_all do |merchant|
-      merchant.name.downcase.include?(name.downcase)
-    end
+    a = @merchant_names.keys.map do |merchant|
+      @merchant_names[merchant] if merchant.downcase.include?(name.downcase)
+    end.flatten.compact
   end
 
   def create_new_id
-    @merchants.map do |merchant|
+    all.map do |merchant|
       merchant.id
     end.max + 1
   end
@@ -54,7 +55,7 @@ class MerchantRepository
     attribute[:id] = create_new_id
     attribute[:created_at] = Time.now
     attribute[:updated_at] = Time.now
-    @merchants << Merchant.new(attribute, self)
+    @merchants[attribute[:id]] = Merchant.new(attribute, self)
   end
 
   def update(id, attribute)
@@ -65,7 +66,7 @@ class MerchantRepository
   end
 
   def delete(id)
-    @merchants.delete(find_by_id(id))
+    @merchants.delete(id)
   end
 
   def inspect
