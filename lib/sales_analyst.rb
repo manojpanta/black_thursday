@@ -198,7 +198,7 @@ class SalesAnalyst
 
   def invoice_items_for_a_merchant(merchant_id)
     merchant_invoices = merchant_repo.find_by_id(merchant_id).invoices
-    invoice_items = merchant_invoices.map do |invoice|
+    merchant_invoices.map do |invoice|
       if invoice.is_paid_in_full?
         invoice_item_repo.find_all_by_invoice_id(invoice.id)
       end
@@ -220,36 +220,10 @@ class SalesAnalyst
     end
   end
 
-  # def most_sold_item_for_merchant(merchant_id)
-  #   merchant_invoices = merchant_repo.find_by_id(merchant_id).invoices
-  #   invoice_items = merchant_invoices.map do |invoice|
-  #     if invoice.is_paid_in_full?
-  #       invoice_item_repo.find_all_by_invoice_id(invoice.id)
-  #     end
-  #   end.flatten.compact
-  #
-  #    invoice_items.sort_by do |invoice_item|
-  #     invoice_item.quantity
-  #   end.reverse
-  #   winner = sorted_invoices[0].quantity
-  #   sorted_invoices = sorted_invoices.delete_if do |invoice|
-  #     invoice.quantity != winner
-  #   end
-  #   sorted_invoices.map do |invoice_item|
-  #     item_repo.find_by_id(invoice_item.item_id)
-  #   end
-  # end
-
   def best_item_for_merchant(merchant_id)
-    merchant_invoices = merchant_repo.find_by_id(merchant_id).invoices
-    invoice_items = merchant_invoices.map do |invoice|
-      if invoice.is_paid_in_full?
-      invoice_item_repo.find_all_by_invoice_id(invoice.id)
-      end
-    end.flatten.compact
-    a = invoice_items.sort_by do |invoice_item|
+    iitem = invoice_items_for_a_merchant(merchant_id).sort_by do |invoice_item|
       invoice_item.revenue_out_of_one_invoice_item
     end.reverse.first
-    item_repo.find_by_id(a.item_id)
+    item_repo.find_by_id(iitem.item_id)
   end
 end
