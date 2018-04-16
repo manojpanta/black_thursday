@@ -2,18 +2,16 @@ require 'csv'
 require 'time'
 require 'date'
 require_relative 'merchant'
-
 class MerchantRepository
-
   attr_reader :path,
               :merchants,
               :sales_engine
 
   def initialize(path, sales_engine)
-    @merchants = {}
+    @merchants      = {}
     @merchant_names = Hash.new{|h, k| h[k] = []}
-    @path = path
-    @sales_engine = sales_engine
+    @path           = path
+    @sales_engine   = sales_engine
     load_path(path)
   end
 

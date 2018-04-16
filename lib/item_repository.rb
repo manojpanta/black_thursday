@@ -2,13 +2,12 @@ require 'csv'
 require 'time'
 require 'date'
 require_relative 'item'
-
 class ItemRepository
   attr_reader :items,
               :sales_engine
 
   def initialize(path, sales_engine)
-    @items = []
+    @items          = []
     @sales_engine ||= sales_engine
     load_path(path)
   end

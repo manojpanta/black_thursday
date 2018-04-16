@@ -1,7 +1,6 @@
 require 'csv'
 require_relative 'invoice'
 require 'time'
-
 class InvoiceRepository
   attr_reader :path,
               :invoices,
@@ -9,9 +8,9 @@ class InvoiceRepository
 
   def initialize(path, sales_engine)
     @sales_engine ||= sales_engine
-    @path = path
-    @invoices = {}
-    @merchant_ids = Hash.new { |h, k| h[k] = [] }
+    @path           = path
+    @invoices       = {}
+    @merchant_ids   = Hash.new { |h, k| h[k] = [] }
     load_path(path)
   end
 

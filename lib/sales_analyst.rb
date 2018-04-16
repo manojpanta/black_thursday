@@ -10,12 +10,12 @@ class SalesAnalyst
               :customer_repo
 
   def initialize(sales_engine)
-    @merchant_repo = sales_engine.merchants
-    @item_repo = sales_engine.items
-    @invoice_repo = sales_engine.invoices
-    @invoice_item_repo = sales_engine.invoice_items
-    @transaction_repo = sales_engine.transactions
-    @customer_repo = sales_engine.customers
+    @merchant_repo      = sales_engine.merchants
+    @item_repo          = sales_engine.items
+    @invoice_repo       = sales_engine.invoices
+    @invoice_item_repo  = sales_engine.invoice_items
+    @transaction_repo   = sales_engine.transactions
+    @customer_repo      = sales_engine.customers
   end
 
   def average_items_per_merchant

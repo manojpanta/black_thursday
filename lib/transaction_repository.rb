@@ -7,10 +7,10 @@ class TransactionRepository
               :sales_engine
 
   def initialize(path, sales_engine)
-    @path = path
+    @path           = path
     @sales_engine ||= sales_engine
-    @transactions = {}
-    @invoice_ids = Hash.new{|h, k| h[k] = []}
+    @transactions   = {}
+    @invoice_ids    = Hash.new{|h, k| h[k] = []}
     load_path(path)
   end
 

@@ -2,15 +2,14 @@ require 'csv'
 require 'time'
 require 'date'
 require_relative 'customer'
-
 class CustomerRepository
   attr_reader :path,
               :customers,
               :sales_engine
 
   def initialize(path, sales_engine)
-    @customers ||= []
-    @path = path
+    @customers    ||= []
+    @path           = path
     @sales_engine ||= sales_engine
     load_path(path)
   end
