@@ -41,8 +41,9 @@ class SalesAnalystTest < Minitest::Test
                           })
 
     sales_analyst = SalesAnalyst.new(se)
+    expected = sales_analyst.item_repo.items.first.name
 
-    assert_equal  '510+ RealPush Icon Set', sales_analyst.item_repo.items.first.name
+    assert_equal  '510+ RealPush Icon Set', expected
     assert_equal 263395237, sales_analyst.item_repo.items.first.id
   end
 
@@ -94,8 +95,9 @@ class SalesAnalystTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv'
                           })
     sales_analyst = SalesAnalyst.new(se)
+    expected = sales_analyst.average_items_per_merchant_standard_deviation
 
-    assert_equal 3.26, sales_analyst.average_items_per_merchant_standard_deviation
+    assert_equal 3.26, expected
   end
 
   def test_it_can_calculate_merchants_with_high_item_count
@@ -199,8 +201,9 @@ class SalesAnalystTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv'
                           })
     sales_analyst = SalesAnalyst.new(se)
+    expected = sales_analyst.average_invoices_per_merchant_standard_deviation
 
-    assert_equal 1.09, sales_analyst.average_invoices_per_merchant_standard_deviation
+    assert_equal 1.09, expected
   end
 
   def test_it_can_calculate_top_merchants_by_invoice_count
@@ -307,7 +310,8 @@ class SalesAnalystTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv'
                           })
     sales_analyst = SalesAnalyst.new(se)
-    assert_equal 21067.77, sales_analyst.total_revenue_by_date(Time.parse("2009-02-07"))
+    expected = sales_analyst.total_revenue_by_date(Time.parse("2009-02-07"))
+    assert_equal 21067.77, expected
 
   end
 

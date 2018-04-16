@@ -3,8 +3,6 @@ require 'bigdecimal'
 require_relative '../lib/item'
 
 class TestItem < Minitest::Test
-
-
   def test_exists
     item = Item.new({
       :id => 12394049,

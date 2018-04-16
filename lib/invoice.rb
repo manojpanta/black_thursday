@@ -64,7 +64,9 @@ class Invoice
   def invoice_total(id)
     invoice_items = invoice_repo.find_invoice_item_for_a_invoice(id)
     invoice_items.reduce(0) do |sum, invoice_item|
-      sum + (invoice_item.quantity * invoice_item.unit_price) if is_paid_in_full?
+      if is_paid_in_full?
+        sum + (invoice_item.quantity * invoice_item.unit_price)
+      end
     end
   end
 end

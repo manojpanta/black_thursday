@@ -106,7 +106,9 @@ class InvoiceRepositoryTest < Minitest::Test
     ir = InvoiceRepository.new('./test/fixtures/invoices.csv', nil)
     assert_equal 21, ir.create_new_id
 
-    result = ir.create({:customer_id => 2, :merchant_id => 3, :status =>  "pending"})
+    result = ir.create({:customer_id => 2,
+                        :merchant_id => 3,
+                        :status =>  "pending"})
     assert_equal 21, result.id
     assert_equal :pending, result.status
   end
@@ -131,7 +133,9 @@ class InvoiceRepositoryTest < Minitest::Test
 
     assert_nil ir.find_by_id(4986)
 
-    result = ir.update(4986,{:status => "shipped", :merchant_id => 4, :customer_id => 7})
+    result = ir.update(4986,{ :status => "shipped",
+                              :merchant_id => 4,
+                              :customer_id => 7})
 
     assert_nil result
   end

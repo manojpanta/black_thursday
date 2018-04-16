@@ -3,7 +3,6 @@ require './lib/transaction'
 
 
 class TransactionTest < Minitest::Test
-
   def test_it_exists
     transaction = Transaction.new({ :id => 6,
                                     :invoice_id => 8,

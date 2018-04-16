@@ -29,7 +29,7 @@ class Transaction
     @credit_card_number = number
   end
 
-  def update_credit_card_expiration_date(date)
+  def update_expiration_date(date)
     @credit_card_expiration_date = date
   end
 
