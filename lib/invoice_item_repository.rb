@@ -6,7 +6,8 @@ class InvoiceItemRepository
 
   def initialize(path, sales_engine)
     @sales_engine ||= sales_engine
-    @invoice_items ||= []
+    @invoice_items = {}
+    @invoice_id = Hash.new{|h, k| h[k] = []}
     load_path(path)
   end
 
@@ -16,7 +17,9 @@ class InvoiceItemRepository
 
   def load_path(path)
     CSV.foreach(path, headers: true, header_converters: :symbol) do |data|
-      @invoice_items << InvoiceItem.new(data, self)
+      invoice_item = InvoiceItem.new(data, self)
+      @invoice_items[invoice_item.id] =  InvoiceItem.new(data, self)
+      @invoice_id[invoice_item.id] << invoice_items
     end
   end
 
@@ -33,9 +36,7 @@ class InvoiceItemRepository
   end
 
   def find_all_by_invoice_id(id)
-    @invoice_items.find_all do |item|
-      item.invoice_id == id
-    end
+    @invoice_id[id]
   end
 
   def create_new_id

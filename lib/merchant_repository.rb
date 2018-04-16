@@ -10,9 +10,9 @@ class MerchantRepository
               :sales_engine
 
   def initialize(path, sales_engine)
-    @merchants ||= []
+    @merchants = []
     @path = path
-    @sales_engine ||= sales_engine
+    @sales_engine = sales_engine
     load_path(path)
   end
 
