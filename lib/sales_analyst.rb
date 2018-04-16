@@ -143,6 +143,7 @@ class SalesAnalyst
   end
 
   def invoice_total(invoice_id)
+    # invoice_repo.find_by_id(invoice_id).invoice_total
     @invoice_item_repo.find_all_by_invoice_id(invoice_id).reduce(0) do |sum,invoice_item|
       sum + (invoice_item.quantity * invoice_item.unit_price)
     end
@@ -203,5 +204,16 @@ class SalesAnalyst
     sorted_invoices.map do |invoice_item|
       item_repo.find_by_id(invoice_item.item_id)
     end
+  end
+
+  def best_item_for_merchant(merchant_id)
+    merchant_invoices = merchant_repo.find_by_id(merchant_id).invoices
+    invoice_items = merchant_invoices.map do |invoice|
+      invoice_item_repo.find_all_by_invoice_id(invoice.id) if invoice.is_paid_in_full?
+    end.flatten.compact
+    a = invoice_items.sort_by do |invoice_item|
+      invoice_item.revenue_out_of_one_invoice_item
+    end.reverse.first
+    item_repo.find_by_id(a.item_id)
   end
 end
