@@ -24,7 +24,7 @@ class InvoiceRepository
   end
 
   def all
-    @invoices
+    @invoices.values
   end
 
   def find_by_id(id)
@@ -32,7 +32,7 @@ class InvoiceRepository
   end
 
   def find_all_by_customer_id(customer_id)
-    @invoices.find_all do |invoice|
+    all.find_all do |invoice|
       invoice.customer_id == customer_id
     end
   end
@@ -42,13 +42,13 @@ class InvoiceRepository
   end
 
   def find_all_by_status(status)
-    @invoices.find_all do |invoice|
+    all.find_all do |invoice|
       invoice.status == status
     end
   end
 
   def create_new_id
-    @invoices.map do |invoice|
+    all.map do |invoice|
       invoice.id
     end.max + 1
   end
@@ -57,7 +57,7 @@ class InvoiceRepository
     attributes[:id] = create_new_id
     attributes[:created_at] = Time.now.strftime('%F')
     attributes[:updated_at] = Time.now.strftime('%F')
-    @invoices << Invoice.new(attributes, self)
+    @invoices[attributes[:id]] = Invoice.new(attributes, self)
   end
 
   def update(id, attributes)
@@ -68,11 +68,11 @@ class InvoiceRepository
   end
 
   def delete(id)
-    @invoices.delete(find_by_id(id))
+    @invoices.delete(id)
   end
 
   def total_invoices_for_a_date(date)
-    @invoices.map do |invoice|
+    all.map do |invoice|
       invoice if invoice.created_at == date
     end.compact
   end

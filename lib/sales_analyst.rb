@@ -23,7 +23,7 @@ class SalesAnalyst
   end
 
   def average_items_per_merchant_standard_deviation
-    numbers_of_item = merchant_repo.merchants.map do |merchant|
+    numbers_of_item = merchant_repo.all.map do |merchant|
       merchant.items.count
     end
     a = numbers_of_item.reduce(0) do |sum, number|
@@ -34,7 +34,7 @@ class SalesAnalyst
 
   def merchants_with_high_item_count
     one_standard_deviation = average_items_per_merchant + average_items_per_merchant_standard_deviation
-    merchant_repo.merchants.map do |merchant|
+    merchant_repo.all.map do |merchant|
       merchant if merchant.items.count > one_standard_deviation
     end.compact
   end
@@ -74,8 +74,8 @@ class SalesAnalyst
   end
 
   def average_invoices_per_merchant
-    numbers_of_invoices = @invoice_repo.invoices.count
-    numbers_of_merchants = @invoice_repo.invoices.map do |invoice|
+    numbers_of_invoices = @invoice_repo.all.count
+    numbers_of_merchants = @invoice_repo.all.map do |invoice|
       invoice.merchant_id
     end.uniq.count
     (numbers_of_invoices.to_f / numbers_of_merchants).round(2)
@@ -109,7 +109,7 @@ class SalesAnalyst
   end
 
   def organize_invoices_by_days_of_the_week
-    @invoice_repo.invoices.group_by do |invoice|
+    @invoice_repo.all.group_by do |invoice|
       invoice.created_at.strftime('%A')
     end
   end
@@ -129,8 +129,8 @@ class SalesAnalyst
   end
 
   def invoice_status(status)
-    total_invoices = @invoice_repo.invoices.count
-    a = @invoice_repo.invoices.map do |invoice|
+    total_invoices = @invoice_repo.all.count
+    a = @invoice_repo.all.map do |invoice|
       invoice if invoice.status == status
     end.compact.count
     ((a.to_f / total_invoices) * 100).round(2)

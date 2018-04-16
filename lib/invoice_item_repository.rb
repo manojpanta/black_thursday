@@ -12,25 +12,23 @@ class InvoiceItemRepository
   end
 
   def all
-    @invoice_items
+    @invoice_items.values
   end
 
   def load_path(path)
     CSV.foreach(path, headers: true, header_converters: :symbol) do |data|
       invoice_item = InvoiceItem.new(data, self)
-      @invoice_items[invoice_item.id] =  InvoiceItem.new(data, self)
-      @invoice_id[invoice_item.id] << invoice_items
+      @invoice_items[invoice_item.id] = invoice_item
+      @invoice_id[invoice_item.invoice_id] << invoice_item
     end
   end
 
   def find_by_id(id)
-    @invoice_items.find do |item|
-      item.id == id
-    end
+    @invoice_items[id]
   end
 
   def find_all_by_item_id(id)
-    @invoice_items.find_all do |item|
+    @invoice_items.values.find_all do |item|
       item.item_id == id
     end
   end
@@ -40,7 +38,7 @@ class InvoiceItemRepository
   end
 
   def create_new_id
-    @invoice_items.map do |item|
+    all.map do |item|
       item.id
     end.max + 1
   end
@@ -49,7 +47,7 @@ class InvoiceItemRepository
     attributes[:id] = create_new_id
     attributes[:created_at] = Time.now.strftime('%F')
     attributes[:updated_at] = Time.now.strftime('%F')
-    @invoice_items << InvoiceItem.new(attributes, self)
+    @invoice_items[attributes[:id]] = InvoiceItem.new(attributes, self)
   end
 
   def update(id, attributes)
@@ -61,7 +59,7 @@ class InvoiceItemRepository
   end
 
   def delete(id)
-    @invoice_items.delete(find_by_id(id))
+    @invoice_items.delete(id)
   end
 
   def inspect
