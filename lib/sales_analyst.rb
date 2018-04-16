@@ -190,14 +190,18 @@ class SalesAnalyst
 
   def most_sold_item_for_merchant(merchant_id)
     merchant_invoices = merchant_repo.find_by_id(merchant_id).invoices
-    a = merchant_invoices.map do |invoice|
+    invoice_items =  merchant_invoices.map do |invoice|
       invoice_item_repo.find_all_by_invoice_id(invoice.id)
     end.flatten
-    b = a.sort_by do |invoice_item|
+    sorted_invoices = invoice_items.sort_by do |invoice_item|
       invoice_item.quantity
-    end.reverse[0..3]
-    b.map do |invoice_item|
+    end.reverse
+    items = sorted_invoices.map do |invoice_item|
       item_repo.find_by_id(invoice_item.item_id)
+    end
+    winner = items[0]
+    items.delete_if do|item|
+      item != winner
     end
   end
 end
