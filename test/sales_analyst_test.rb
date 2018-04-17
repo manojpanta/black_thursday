@@ -231,7 +231,7 @@ class SalesAnalystTest < Minitest::Test
 
     assert_equal 0, sales_analyst.bottom_merchants_by_invoice_count.count
     assert_equal 7, sales_analyst.organize_invoices_by_days_of_the_week.count
-    assert_equal 2.24, sales_analyst.standard_deviation_for_invoices
+    assert_equal 2.24, sales_analyst.stddv_for_invoices
   end
 
   def test_it_can_find_top_days_by_invoice_count
