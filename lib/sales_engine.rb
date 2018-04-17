@@ -5,7 +5,7 @@ require_relative 'invoice_item_repository'
 require_relative 'sales_analyst'
 require_relative 'transaction_repository'
 require_relative 'customer_repository'
-
+# this is salesengine class
 class SalesEngine
   attr_reader :path,
               :items,

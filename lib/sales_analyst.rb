@@ -1,6 +1,6 @@
 require_relative 'sales_engine'
 require 'time'
-
+# this is sales analyst class
 class SalesAnalyst
   attr_reader :merchant_repo,
               :item_repo,
@@ -52,12 +52,12 @@ class SalesAnalyst
     @merchant_repo.all.reduce(0) do |sum, merchant|
       average_price = average_item_price_for_merchant(merchant.id)
       merchants_count = @merchant_repo.merchants.count
-      sum + (average_price/ merchants_count)
+      sum + (average_price / merchants_count)
     end.round(2)
   end
 
   def average_price_of_items
-    @item_repo.items.reduce(0) do|total, item|
+    @item_repo.items.reduce(0) do |total, item|
       total + item.unit_price / @item_repo.items.count
     end.round(2)
   end
@@ -121,7 +121,7 @@ class SalesAnalyst
   end
 
   def stddv_for_invoices
-    a = organize_invoices_by_days_of_the_week.reduce(0) do |sum, (key,value)|
+    a = organize_invoices_by_days_of_the_week.reduce(0) do |sum, (key, value)|
       sum + (value.count - average_number_of_invoices_per_day) ** 2
     end / 6
     Math.sqrt(a).round(2)

@@ -2,6 +2,7 @@ require 'csv'
 require 'time'
 require 'date'
 require_relative 'customer'
+# this is customer repository
 class CustomerRepository
   attr_reader :path,
               :customers,

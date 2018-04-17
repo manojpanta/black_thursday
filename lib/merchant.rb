@@ -1,3 +1,4 @@
+# this is merchant class
 class Merchant
   attr_reader :id,
               :created_at,

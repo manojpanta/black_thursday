@@ -1,6 +1,6 @@
 require'csv'
 require_relative 'transaction'
-
+# this is transaction repo
 class TransactionRepository
   attr_reader :transactions,
               :path,
@@ -10,7 +10,7 @@ class TransactionRepository
     @path           = path
     @sales_engine   = sales_engine
     @transactions   = {}
-    @invoice_ids    = Hash.new{|h, k| h[k] = []}
+    @invoice_ids    = Hash.new { |h, k| h[k] = [] }
     load_path(path)
   end
 

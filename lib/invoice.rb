@@ -1,4 +1,5 @@
 require 'time'
+# this is invoice class
 class Invoice
   attr_reader :id,
               :customer_id,

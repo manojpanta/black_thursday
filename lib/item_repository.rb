@@ -2,6 +2,7 @@ require 'csv'
 require 'time'
 require 'date'
 require_relative 'item'
+# this is item repo
 class ItemRepository
   attr_reader :items,
               :sales_engine
@@ -77,7 +78,7 @@ class ItemRepository
     item = find_by_id(id)
     item.update_updated_at
     item.update_name(attributes[:name]) if attributes[:name]
-    item.update_description(attributes[:description]) if attributes[:description]
+    item.update_description(attributes[:description])if attributes[:description]
     item.update_unit_price(attributes[:unit_price]) if attributes[:unit_price]
   end
 

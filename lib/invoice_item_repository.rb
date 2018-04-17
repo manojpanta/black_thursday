@@ -1,12 +1,13 @@
 require 'csv'
 require_relative 'invoice_item'
+# this is invoice repo
 class InvoiceItemRepository
   attr_reader :invoice_items
 
   def initialize(path, sales_engine)
     @sales_engine  = sales_engine
     @invoice_items = {}
-    @invoice_id    = Hash.new{|h, k| h[k] = []}
+    @invoice_id    = Hash.new { |h, k| h[k] = [] }
     load_path(path)
   end
 
