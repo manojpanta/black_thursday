@@ -57,7 +57,6 @@ class InvoiceRepositoryTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv'
                           })
     ir = InvoiceRepository.new('./test/fixtures/invoices.csv',se)
-    # require 'pry'; binding.pry
 
     assert_instance_of  Merchant, ir.all.first.merchant
     assert_equal "IanLudiBoards", ir.all.first.merchant.name
@@ -180,4 +179,36 @@ class InvoiceRepositoryTest < Minitest::Test
 
     assert_equal 0, ir.total_invoices_for_a_date("2014-03-15").count
   end
+
+  def test_it_can_find_items_for_invoice
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    ir = InvoiceRepository.new('./test/fixtures/invoices.csv',se)
+    result = ir.all.first.items
+    assert_instance_of Item, result.first
+    assert_equal 8, result.count
+    name = "Catnip Pillow / Cat Toy Containing Strong Dried CATNIP"
+    assert_equal name, result.first.name
+  end
+
+  def test_it_can_find_a_customer_for_invoice
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    ir = InvoiceRepository.new('./test/fixtures/invoices.csv',se)
+
+    result = ir.all.first.customer
+    assert_instance_of Customer, result
+    assert_equal 1, result.id
+  end
+
 end

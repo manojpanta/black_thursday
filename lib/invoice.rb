@@ -29,17 +29,9 @@ class Invoice
     @status = status
   end
 
-  def update_merchant_id(id)
-    @merchant_id = id
-  end
-
-  def update_customer_id(id)
-    @customer_id = id
-  end
-
   def items
-    array = @invoice_repo.sales_engine.invoice_items.find_all_by_invoice_id(id)
-    array.map do |invoice_item|
+    invoice_items = invoice_repo.find_invoice_item_for_a_invoice(id)
+    invoice_items.map do |invoice_item|
       @invoice_repo.sales_engine.items.find_by_id(invoice_item.item_id)
     end.uniq
   end
