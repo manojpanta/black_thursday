@@ -1,18 +1,20 @@
 require 'time'
+# this is customer class
 class Customer
   attr_reader :id,
               :first_name,
               :last_name,
               :created_at,
-              :updated_at
-
+              :updated_at,
+              :customer_repo
 
   def initialize(data, customer_repo)
-    @id = data[:id].to_i
+    @id         = data[:id].to_i
     @first_name = data[:first_name].to_s
-    @last_name = data[:last_name].to_s
+    @last_name  = data[:last_name].to_s
     @created_at = Time.parse(data[:created_at])
     @updated_at = Time.parse(data[:updated_at])
+    @customer_repo = customer_repo
   end
 
   def update_updated_time

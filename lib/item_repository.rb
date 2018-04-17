@@ -2,14 +2,14 @@ require 'csv'
 require 'time'
 require 'date'
 require_relative 'item'
-
+# this is item repo
 class ItemRepository
   attr_reader :items,
               :sales_engine
 
   def initialize(path, sales_engine)
-    @items = []
-    @sales_engine ||= sales_engine
+    @items          = []
+    @sales_engine   = sales_engine
     load_path(path)
   end
 
@@ -69,17 +69,17 @@ class ItemRepository
     attributes[:id] = create_new_id
     attributes[:created_at] = Time.now.to_s
     attributes[:updated_at] = Time.now.to_s
-    @items << Item.new(attributes,self)
-    Item.new(attributes,self)
+    @items << Item.new(attributes, self)
+    Item.new(attributes, self)
   end
 
   def update(id, attributes)
     return nil if find_by_id(id).nil?
-    to_update = find_by_id(id)
-    to_update.update_updated_at
-    to_update.update_name(attributes[:name]) if attributes[:name]
-    to_update.update_description(attributes[:description]) if attributes[:description]
-    to_update.update_unit_price(attributes[:unit_price]) if attributes[:unit_price]
+    item = find_by_id(id)
+    item.update_updated_at
+    item.update_name(attributes[:name]) if attributes[:name]
+    item.update_description(attributes[:description])if attributes[:description]
+    item.update_unit_price(attributes[:unit_price]) if attributes[:unit_price]
   end
 
   def delete(id)

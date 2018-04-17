@@ -2,18 +2,17 @@ require 'csv'
 require 'time'
 require 'date'
 require_relative 'merchant'
-
+# this is merchant repo class
 class MerchantRepository
-
   attr_reader :path,
               :merchants,
               :sales_engine
 
   def initialize(path, sales_engine)
-    @merchants = {}
-    @merchant_names = Hash.new{|h, k| h[k] = []}
-    @path = path
-    @sales_engine = sales_engine
+    @merchants      = {}
+    @merchant_names = Hash.new { |h, k| h[k] = [] }
+    @path           = path
+    @sales_engine   = sales_engine
     load_path(path)
   end
 
@@ -40,7 +39,7 @@ class MerchantRepository
   end
 
   def find_all_by_name(name)
-    a = @merchant_names.keys.map do |merchant|
+    @merchant_names.keys.map do |merchant|
       @merchant_names[merchant] if merchant.downcase.include?(name.downcase)
     end.flatten.compact
   end

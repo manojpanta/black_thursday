@@ -1,6 +1,6 @@
 require_relative 'test_helper'
 require './lib/transaction_repository'
-
+# this is transaction repo test
 class TransactionRepositoryTest < Minitest::Test
   def test_exists
     tr = TransactionRepository.new('./test/fixtures/transactions.csv', nil)
@@ -19,25 +19,22 @@ class TransactionRepositoryTest < Minitest::Test
 
     assert_equal 200, tr.all.count
     assert_equal 2179, tr.all.first.invoice_id
-    assert_equal "4068631943231473", tr.all.first.credit_card_number
-    assert_equal "0217", tr.all.first.credit_card_expiration_date
+    assert_equal '4068631943231473', tr.all.first.credit_card_number
+    assert_equal '0217', tr.all.first.credit_card_expiration_date
     assert_equal :success, tr.all.first.result
     assert_equal 200, tr.all.last.id
-    # assert_equal "2012-02-26 20:56:56 UTC", tr.all.first.created_at
-    # assert_equal "2012-02-26 20:56:56 UTC", tr.all.first.updated_at
   end
 
   def test_it_can_find_by_id
     tr = TransactionRepository.new('./test/fixtures/transactions.csv', nil)
 
-
     result = tr.find_by_id(5)
 
     assert_equal 5, result.id
     assert_equal 3715, result.invoice_id
-    assert_equal "4297222478855497", result.credit_card_number
-    assert_equal "1215", result.credit_card_expiration_date
-    assert_equal :success,result.result
+    assert_equal '4297222478855497', result.credit_card_number
+    assert_equal '1215', result.credit_card_expiration_date
+    assert_equal :success, result.result
   end
 
   def test_it_can_find_by_returns_nil_for_invalid_id
@@ -60,8 +57,7 @@ class TransactionRepositoryTest < Minitest::Test
   def test_find_all_returns_empty_array_for_invalid_invoice_id
     tr = TransactionRepository.new('./test/fixtures/transactions.csv', nil)
 
-
-    result =  tr.find_all_by_invoice_id(00000000)
+    result = tr.find_all_by_invoice_id(00000000)
     assert_equal [], result
   end
 
@@ -71,7 +67,7 @@ class TransactionRepositoryTest < Minitest::Test
     result = tr.find_all_by_credit_card_number(4177816490204479)
 
     assert_equal 0, result.count
-    assert_equal nil, result.first
+    assert_nil result.first
   end
 
   def test_find_all_by_credit_card_number_returns_empty_array_for_invalid_number
@@ -109,16 +105,16 @@ class TransactionRepositoryTest < Minitest::Test
 
     assert_nil tr.find_by_id(201)
 
-    result = tr.create({:invoice_id => 1,
-                        :credit_card_number => 1234567,
-                        :credit_card_expiration_date => "0102",
-                        :result => "failed"})
+    result = tr.create({ :invoice_id => 1,
+                         :credit_card_number => 1234567,
+                         :credit_card_expiration_date => '0102',
+                         :result => 'failed' })
 
     result1 = tr.find_by_id(201)
 
     assert_equal 1, result1.invoice_id
     assert_equal 1234567, result1.credit_card_number
-    assert_equal "0102", result1.credit_card_expiration_date
+    assert_equal '0102', result1.credit_card_expiration_date
     assert_equal :failed, result1.result
     assert_equal 201, result1.id
   end
@@ -127,24 +123,23 @@ class TransactionRepositoryTest < Minitest::Test
     def test_it_Can_update_transaction
       tr = TransactionRepository.new('./test/fixtures/transactions.csv', nil)
 
-
       result = tr.find_by_id(5)
 
       assert_equal 3715, result.invoice_id
-      assert_equal "4297222478855497", result.credit_card_number
-      assert_equal "1215", result.credit_card_expiration_date
-      assert_equal :success,result.result
+      assert_equal '4297222478855497', result.credit_card_number
+      assert_equal '1215', result.credit_card_expiration_date
+      assert_equal :success, result.result
 
-      tr.update(5,{:invoice_id => 1,
-                  :credit_card_number => 1234567,
-                  :credit_card_expiration_date => "0102",
-                  :result => "failed"})
+      tr.update(5, { :invoice_id => 1,
+                     :credit_card_number => 1234567,
+                     :credit_card_expiration_date => '0102',
+                     :result => 'failed' })
 
       result1 = tr.find_by_id(5)
 
       assert_equal 3715, result1.invoice_id
       assert_equal 1234567, result1.credit_card_number
-      assert_equal "0102", result1.credit_card_expiration_date
+      assert_equal '0102', result1.credit_card_expiration_date
       assert_equal :failed, result1.result
     end
 
@@ -155,10 +150,9 @@ class TransactionRepositoryTest < Minitest::Test
 
       assert_equal :success,result.result
 
-      tr.update(5,{:invoice_id => 1,
-                  :credit_card_number => 1234567,
-                  :credit_card_expiration_date => "0102",
-                  })
+      tr.update(5, { :invoice_id => 1,
+                     :credit_card_number => 1234567,
+                     :credit_card_expiration_date => '0102' })
 
       result1 = tr.find_by_id(5)
 

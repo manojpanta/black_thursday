@@ -1,9 +1,9 @@
 require_relative 'test_helper'
 require_relative '../lib/item_repository'
-
+# this is item repi test
 class ItemRepositoryTest < Minitest::Test
   def test_exists
-    item_repo = ItemRepository.new('./test/fixtures/items.csv', nil,)
+    item_repo = ItemRepository.new('./test/fixtures/items.csv', nil)
     assert_instance_of ItemRepository, item_repo
   end
 
@@ -11,7 +11,6 @@ class ItemRepositoryTest < Minitest::Test
     item_repo = ItemRepository.new('./test/fixtures/items.csv', nil)
     assert_instance_of Array, item_repo.items
     assert_equal 263395237, item_repo.items.first.id
-    # assert_equal (2016-01-11 09:34:06 UTC), item_repo.items.first.created_at
   end
 
   def test_it_loads_items
@@ -99,7 +98,10 @@ class ItemRepositoryTest < Minitest::Test
   def test_creates_attributes
     item_repo = ItemRepository.new('./test/fixtures/items.csv', nil)
 
-    result = item_repo.create({unit_price: 5, merchant_id: 12345, name: 'Mango', description: 'Tasty fruit'})
+    result = item_repo.create({ unit_price: 5,
+                                merchant_id: 12345,
+                                name: 'Mango',
+                                description: 'Tasty fruit' })
     assert_equal 'Mango', result.name
     result1 = item_repo.find_by_name('Mango')
     assert_equal 12345, result1.merchant_id
@@ -108,11 +110,16 @@ class ItemRepositoryTest < Minitest::Test
 
   def test_updates_merchant_instance
     item_repo = ItemRepository.new('./test/fixtures/items.csv', nil)
-    result = item_repo.create({unit_price: 15, merchant_id: 12345, name: 'Mango', description: 'Tasty fruit'})
+    result = item_repo.create({ unit_price: 15,
+                                merchant_id: 12345,
+                                name: 'Mango',
+                                description: 'Tasty fruit' })
     assert_equal 'Mango', result.name
     assert_equal 263567475, result.id
 
-    item_repo.update(263567475, {name: 'dinosaur', description: 'extincted', unit_price: 1000})
+    item_repo.update(263567475, { name: 'dinosaur',
+                                  description: 'extincted',
+                                  unit_price: 1000 })
 
     result = item_repo.find_by_id(263567475)
     assert_equal 'dinosaur', result.name
@@ -125,7 +132,10 @@ class ItemRepositoryTest < Minitest::Test
     item_repo = ItemRepository.new('./test/fixtures/items.csv', nil)
 
     assert_equal 1367, item_repo.items.count
-    result = item_repo.create({unit_price: 15, merchant_id: 12345, name: 'Mango', description: 'Tasty fruit'})
+    result = item_repo.create({ unit_price: 15,
+                                merchant_id: 12345,
+                                name: 'Mango',
+                                description: 'Tasty fruit' })
     assert_equal 263567475, item_repo.items.last.id
 
     assert_equal 1368, item_repo.items.count

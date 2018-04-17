@@ -1,6 +1,6 @@
 require_relative 'test_helper'
 require './lib/customer_repository'
-
+# this trasaction repo test
 class TransactionRepositoryTest < Minitest::Test
   def test_exists
     cr = CustomerRepository.new('./test/fixtures/customers.csv', nil)
@@ -51,7 +51,7 @@ class TransactionRepositoryTest < Minitest::Test
     assert_equal 'Nader', result.first.last_name
     assert_equal 5, result.first.id
   end
-  
+
   def test_it_returns_empty_array_for_invalid_first_name
     cr = CustomerRepository.new('./test/fixtures/customers.csv', nil)
 
@@ -60,7 +60,7 @@ class TransactionRepositoryTest < Minitest::Test
     assert_equal [], result
   end
 
-  def test_it_can_find_all_customers_by_first_name
+  def test_finds_all_customers_by_first_name
     cr = CustomerRepository.new('./test/fixtures/customers.csv', nil)
 
     result = cr.find_all_by_last_name('Nade')
@@ -94,17 +94,14 @@ class TransactionRepositoryTest < Minitest::Test
 
     assert_nil cr.find_by_id(201)
 
-    result = cr.create({:first_name => 'tyler',
-                        :last_name => 'westlie'
-                        })
+    result = cr.create({ :first_name => 'tyler',
+                         :last_name => 'westlie' })
 
     result1 = cr.find_by_id(201)
 
     assert_equal 201, result1.id
     assert_equal 'tyler', result1.first_name
     assert_equal 'westlie', result1.last_name
-    # assert_equal '', result1.created_at
-    # assert_equal '', result1.updated_at
   end
 
   def test_it_can_update_customer
@@ -117,11 +114,11 @@ class TransactionRepositoryTest < Minitest::Test
     assert_equal 5, result.id
 
     cr.update(5, { :first_name => 'tyler',
-                   :last_name => 'westlie'})
+                   :last_name => 'westlie' })
     result1 = cr.find_by_id(5)
 
-    assert_equal 'tyler', result.first_name
-    assert_equal 'westlie', result.last_name
+    assert_equal 'tyler', result1.first_name
+    assert_equal 'westlie', result1.last_name
     assert_equal 5, result.id
   end
 
@@ -133,13 +130,12 @@ class TransactionRepositoryTest < Minitest::Test
     assert_equal 'Sylvester', result.first_name
     assert_equal 'Nader', result.last_name
 
-    cr.update(5, { :first_name => 'tyler'
-                 })
+    cr.update(5, { :first_name => 'tyler' })
 
     result1 = cr.find_by_id(5)
 
-    assert_equal 'tyler', result.first_name
-    assert_equal 'Nader', result.last_name
+    assert_equal 'tyler', result1.first_name
+    assert_equal 'Nader', result1.last_name
     assert_equal 5, result.id
   end
 

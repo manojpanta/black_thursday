@@ -1,13 +1,13 @@
 require 'csv'
 require_relative 'invoice_item'
-
+# this is invoice repo
 class InvoiceItemRepository
   attr_reader :invoice_items
 
   def initialize(path, sales_engine)
-    @sales_engine ||= sales_engine
+    @sales_engine  = sales_engine
     @invoice_items = {}
-    @invoice_id = Hash.new{|h, k| h[k] = []}
+    @invoice_id    = Hash.new { |h, k| h[k] = [] }
     load_path(path)
   end
 
@@ -51,11 +51,12 @@ class InvoiceItemRepository
   end
 
   def update(id, attributes)
-    return nil if  find_by_id(id).nil?
+    return nil if find_by_id(id).nil?
     to_update = find_by_id(id)
+    price = :unit_price
     to_update.update_updated_at
     to_update.update_quantity(attributes[:quantity]) if attributes[:quantity]
-    to_update.update_unit_price(attributes[:unit_price]) if attributes[:unit_price]
+    to_update.update_unit_price(attributes[price]) if attributes[price]
   end
 
   def delete(id)

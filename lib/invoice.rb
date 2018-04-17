@@ -1,4 +1,5 @@
 require 'time'
+# this is invoice class
 class Invoice
   attr_reader :id,
               :customer_id,
@@ -7,16 +8,14 @@ class Invoice
               :created_at,
               :updated_at,
               :invoice_repo
-
-
   def initialize(data, invoice_repo)
     @invoice_repo = invoice_repo
-    @id = data[:id].to_i
-    @customer_id = data[:customer_id].to_i
-    @merchant_id = data[:merchant_id].to_i
-    @status = data[:status].to_sym
-    @created_at = Time.parse(data[:created_at])
-    @updated_at = Time.parse(data[:updated_at])
+    @id           = data[:id].to_i
+    @customer_id  = data[:customer_id].to_i
+    @merchant_id  = data[:merchant_id].to_i
+    @status       = data[:status].to_sym
+    @created_at   = Time.parse(data[:created_at])
+    @updated_at   = Time.parse(data[:updated_at])
   end
 
   def merchant
@@ -28,20 +27,12 @@ class Invoice
   end
 
   def update_status(status)
-    @status = status
-  end
-
-  def update_merchant_id(id)
-    @merchant_id = id
-  end
-
-  def update_customer_id(id)
-    @customer_id = id
+    @status = status.to_sym
   end
 
   def items
-    array = @invoice_repo.sales_engine.invoice_items.find_all_by_invoice_id(id)
-    array.map do |invoice_item|
+    invoice_items = invoice_repo.find_invoice_item_for_a_invoice(id)
+    invoice_items.map do |invoice_item|
       @invoice_repo.sales_engine.items.find_by_id(invoice_item.item_id)
     end.uniq
   end
@@ -49,7 +40,6 @@ class Invoice
   def transactions
     @invoice_repo.find_transactions_for_a_invoice(id)
   end
-
 
   def customer
     @invoice_repo.find_customer_of_a_invoice(customer_id)
@@ -64,7 +54,9 @@ class Invoice
   def invoice_total(id)
     invoice_items = invoice_repo.find_invoice_item_for_a_invoice(id)
     invoice_items.reduce(0) do |sum, invoice_item|
-      sum + (invoice_item.quantity * invoice_item.unit_price) if is_paid_in_full?
+      if is_paid_in_full?
+        sum + (invoice_item.quantity * invoice_item.unit_price)
+      end
     end
   end
 end

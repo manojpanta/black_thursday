@@ -1,15 +1,17 @@
 require_relative 'test_helper'
 require './lib/invoice_repository'
-
+require_relative '../lib/sales_engine'
+# this is invoice repo test
 class InvoiceRepositoryTest < Minitest::Test
   def test_exists
     ir = InvoiceRepository.new('./test/fixtures/invoices.csv', nil)
     assert_instance_of InvoiceRepository, ir
   end
+
   def test_it_can_have_path
     ir = InvoiceRepository.new('./test/fixtures/invoices.csv', nil)
 
-    assert_equal './test/fixtures/invoices.csv',ir.path
+    assert_equal './test/fixtures/invoices.csv', ir.path
   end
 
   def test_it_can_load_invoices_from_path_given
@@ -45,6 +47,20 @@ class InvoiceRepositoryTest < Minitest::Test
     result = ir.find_by_id(0)
 
     assert_nil result
+  end
+
+  def test_it_can_find_merchant_for_invoice
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    ir = InvoiceRepository.new('./test/fixtures/invoices.csv', se)
+
+    assert_instance_of Merchant, ir.all.first.merchant
+    assert_equal 'IanLudiBoards', ir.all.first.merchant.name
   end
 
   def test_it_can_find_all_invoices_by_customer_id
@@ -90,7 +106,7 @@ class InvoiceRepositoryTest < Minitest::Test
   def test_it_returns_empty_array_for_invalid_status
     ir = InvoiceRepository.new('./test/fixtures/invoices.csv', nil)
 
-    result = ir.find_all_by_status("0")
+    result = ir.find_all_by_status('0')
 
     assert_equal [], result
   end
@@ -106,7 +122,9 @@ class InvoiceRepositoryTest < Minitest::Test
     ir = InvoiceRepository.new('./test/fixtures/invoices.csv', nil)
     assert_equal 21, ir.create_new_id
 
-    result = ir.create({:customer_id => 2, :merchant_id => 3, :status =>  "pending"})
+    result = ir.create({ :customer_id => 2,
+                         :merchant_id => 3,
+                         :status =>  'pending' })
     assert_equal 21, result.id
     assert_equal :pending, result.status
   end
@@ -119,7 +137,7 @@ class InvoiceRepositoryTest < Minitest::Test
     assert_equal 12335938, result.merchant_id
     assert_equal 1, result.customer_id
 
-    ir.update(1,{:status => "shipped", :merchant_id => 4, :customer_id => 7})
+    ir.update(1, {:status => 'shipped', :merchant_id => 4, :customer_id => 7})
     result1 = ir.find_by_id(1)
     assert_equal :shipped, result1.status
     assert_equal 12335938, result1.merchant_id
@@ -131,7 +149,9 @@ class InvoiceRepositoryTest < Minitest::Test
 
     assert_nil ir.find_by_id(4986)
 
-    result = ir.update(4986,{:status => "shipped", :merchant_id => 4, :customer_id => 7})
+    result = ir.update(4986, { :status => 'shipped',
+                               :merchant_id => 4,
+                               :customer_id => 7 })
 
     assert_nil result
   end
@@ -152,12 +172,42 @@ class InvoiceRepositoryTest < Minitest::Test
   def test_it_can_find_all_invoices_for_a_day
     ir = InvoiceRepository.new('./test/fixtures/invoices.csv', nil)
 
-    assert_equal 2, ir.total_invoices_for_a_date("2014-03-15").count
+    assert_equal 1, ir.total_invoices_for_a_date(Time.parse('2009-02-07')).count
   end
 
-  def test_it_can_find_all_invoices_for_a_day
+  def test_it_finds_all_invoices_for_a_day
     ir = InvoiceRepository.new('./test/fixtures/invoices.csv', nil)
 
-    assert_equal 0, ir.total_invoices_for_a_date("2014-03-15").count
+    assert_equal 0, ir.total_invoices_for_a_date('2014-03-15').count
+  end
+
+  def test_it_can_find_items_for_invoice
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv' })
+    ir = InvoiceRepository.new('./test/fixtures/invoices.csv', se)
+    result = ir.all.first.items
+    assert_instance_of Item, result.first
+    assert_equal 8, result.count
+    name = 'Catnip Pillow / Cat Toy Containing Strong Dried CATNIP'
+    assert_equal name, result.first.name
+  end
+
+  def test_it_can_find_a_customer_for_invoice
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    ir = InvoiceRepository.new('./test/fixtures/invoices.csv', se)
+
+    result = ir.all.first.customer
+    assert_instance_of Customer, result
+    assert_equal 1, result.id
   end
 end
