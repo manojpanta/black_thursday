@@ -1,6 +1,6 @@
 require_relative 'test_helper'
 require './lib/invoice_item'
-
+# this is invoice item test
 class InvoiceItemTest < Minitest::Test
   def test_exists
     ii = InvoiceItem.new({ :id => 1,
@@ -10,6 +10,7 @@ class InvoiceItemTest < Minitest::Test
                            :unit_price => 13635,
                            :created_at => Time.now.to_s,
                            :updated_at => Time.now.to_s }, nil)
+
     assert_instance_of InvoiceItem, ii
   end
 

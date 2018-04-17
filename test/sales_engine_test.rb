@@ -1,9 +1,8 @@
 require_relative 'test_helper'
 require 'csv'
 require_relative '../lib/sales_engine'
-
+# this is salesengine test
 class SalesEngineTest<Minitest::Test
-
   def test_it_exists
     se = SalesEngine.new({:items => './test/fixtures/items.csv',
                           :merchants => './test/fixtures/merchants.csv',

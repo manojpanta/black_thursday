@@ -1,12 +1,12 @@
 require_relative 'test_helper'
 require './lib/invoice'
+# this is invoice test
 class InvoiceTest < Minitest::Test
-
   def test_exists
     invoice = Invoice.new({ :id => 6,
                             :customer_id => 7,
                             :merchant_id => 8,
-                            :status      => "pending",
+                            :status      => 'pending',
                             :created_at  => Time.now.to_s,
                             :updated_at  => Time.now.to_s }, nil)
 
@@ -17,7 +17,7 @@ class InvoiceTest < Minitest::Test
     invoice = Invoice.new({ :id => 6,
                             :customer_id => 7,
                             :merchant_id => 8,
-                            :status      => "pending",
+                            :status      => 'pending',
                             :created_at  => Time.now.to_s,
                             :updated_at  => Time.now.to_s }, nil)
 
@@ -33,12 +33,11 @@ class InvoiceTest < Minitest::Test
     invoice = Invoice.new({ :id => 6,
                             :customer_id => 7,
                             :merchant_id => 8,
-                            :status      => "pending",
+                            :status      => 'pending',
                             :created_at  => Time.now.to_s,
                             :updated_at  => Time.now.to_s }, nil)
 
-    invoice.update_status("success")
+    invoice.update_status('success')
     assert_equal :success, invoice.status
   end
-
 end
