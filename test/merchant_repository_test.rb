@@ -1,5 +1,6 @@
 require_relative 'test_helper'
 require './lib/merchant_repository'
+require './lib/sales_engine'
 
 class MerchantRepositoryTest< MiniTest::Test
   def test_it_exists
@@ -21,6 +22,22 @@ class MerchantRepositoryTest< MiniTest::Test
     assert merchant_repo.all.all? {|merchant|merchant.kind_of?(Merchant)}
     assert_equal 'Shopin1901', merchant_repo.all.first.name
     assert_equal 12334105, merchant_repo.all.first.id
+  end
+
+  def test_it_can_find_customers_for_merchant
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    merchant_repo = MerchantRepository.new('./data/merchants.csv', se)
+    result = merchant_repo.all.last.customers
+    require 'pry'; binding.pry
+    assert_instance_of Customer, result.first
+    assert_equal '', result.first.first_name
+
   end
 
   def test_it_can_find_by_id
