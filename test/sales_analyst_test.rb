@@ -72,7 +72,7 @@ class SalesAnalystTest < Minitest::Test
 
     assert_equal 475, sales_analyst.merchant_repo.merchants.count
   end
-
+  
   def test_it_can_find_average_items_per_merchants
     se = SalesEngine.new({:items => './test/fixtures/items.csv',
                           :merchants => './test/fixtures/merchants.csv',

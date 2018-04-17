@@ -1,5 +1,6 @@
 require_relative 'test_helper'
 require './lib/invoice_repository'
+require_relative '../lib/sales_engine'
 
 class InvoiceRepositoryTest < Minitest::Test
   def test_exists
@@ -45,6 +46,21 @@ class InvoiceRepositoryTest < Minitest::Test
     result = ir.find_by_id(0)
 
     assert_nil result
+  end
+
+  def test_it_can_find_merchant_for_invoice
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    ir = InvoiceRepository.new('./test/fixtures/invoices.csv',se)
+    # require 'pry'; binding.pry
+
+    assert_instance_of  Merchant, ir.all.first.merchant
+    assert_equal "IanLudiBoards", ir.all.first.merchant.name
   end
 
   def test_it_can_find_all_invoices_by_customer_id

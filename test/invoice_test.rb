@@ -30,4 +30,5 @@ class InvoiceTest < Minitest::Test
       # assert_equal 3, invoice.created_at
       # assert_equal 4, invoice.updated_at
   end
+
 end
