@@ -1,6 +1,6 @@
-# SalesAnalyst
 require_relative 'sales_engine'
 require 'time'
+
 class SalesAnalyst
   attr_reader :merchant_repo,
               :item_repo,

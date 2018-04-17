@@ -39,10 +39,6 @@ class InvoiceTest < Minitest::Test
 
     invoice.update_status("success")
     assert_equal :success, invoice.status
-
-
-
-
   end
 
 end

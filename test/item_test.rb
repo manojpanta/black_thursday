@@ -1,6 +1,7 @@
 require_relative 'test_helper'
 require 'bigdecimal'
 require_relative '../lib/item'
+require './lib/sales_engine'
 
 class TestItem < Minitest::Test
   def test_exists
@@ -29,6 +30,17 @@ class TestItem < Minitest::Test
     assert_equal 0.45, item.unit_price_to_dollars
     assert_equal Time.parse(Time.now.to_s), item.updated_at
     assert_equal Time.parse(Time.now.to_s), item.created_at
+  end
+
+  def test_it_can_find_merchant_for_a_item
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv' })
+    item = se.items.items.first.merchant
+    assert_equal 'jejum', item.name
   end
 
 end

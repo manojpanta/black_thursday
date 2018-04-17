@@ -9,7 +9,7 @@ class MerchantRepository
 
   def initialize(path, sales_engine)
     @merchants      = {}
-    @merchant_names = Hash.new{|h, k| h[k] = []}
+    @merchant_names = Hash.new{ |h, k| h[k] = [] }
     @path           = path
     @sales_engine   = sales_engine
     load_path(path)

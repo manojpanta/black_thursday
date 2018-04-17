@@ -11,7 +11,6 @@ class ItemRepositoryTest < Minitest::Test
     item_repo = ItemRepository.new('./test/fixtures/items.csv', nil)
     assert_instance_of Array, item_repo.items
     assert_equal 263395237, item_repo.items.first.id
-    # assert_equal (2016-01-11 09:34:06 UTC), item_repo.items.first.created_at
   end
 
   def test_it_loads_items
