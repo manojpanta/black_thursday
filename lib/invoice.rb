@@ -26,7 +26,7 @@ class Invoice
   end
 
   def update_status(status)
-    @status = status
+    @status = status.to_sym
   end
 
   def items

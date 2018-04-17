@@ -71,7 +71,7 @@ class TransactionRepositoryTest < Minitest::Test
     result = tr.find_all_by_credit_card_number(4177816490204479)
 
     assert_equal 0, result.count
-    assert_equal nil, result.first
+    assert_nil result.first
   end
 
   def test_find_all_by_credit_card_number_returns_empty_array_for_invalid_number

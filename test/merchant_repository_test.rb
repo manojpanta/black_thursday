@@ -24,21 +24,6 @@ class MerchantRepositoryTest< MiniTest::Test
     assert_equal 12334105, merchant_repo.all.first.id
   end
 
-  def test_it_can_find_customers_for_merchant
-    se = SalesEngine.new({:items => './test/fixtures/items.csv',
-                          :merchants => './test/fixtures/merchants.csv',
-                          :invoices => './test/fixtures/invoices.csv',
-                          :invoice_items => './test/fixtures/invoice_items.csv',
-                          :transactions => './test/fixtures/transactions.csv',
-                          :customers => './test/fixtures/customers.csv'
-                          })
-    merchant_repo = MerchantRepository.new('./data/merchants.csv', se)
-    result = merchant_repo.all.last.customers
-    require 'pry'; binding.pry
-    assert_instance_of Customer, result.first
-    assert_equal '', result.first.first_name
-
-  end
 
   def test_it_can_find_by_id
     merchant_repo = MerchantRepository.new('./data/merchants.csv', nil)
@@ -92,8 +77,8 @@ class MerchantRepositoryTest< MiniTest::Test
     result = merchant_repo.find_all_by_name("Walmart")
 
     assert_equal 0, result.count
-    assert_equal nil, result.first
-    assert_equal nil, result[1]
+    assert_nil result.first
+    assert_nil result[1]
   end
 
   def test_it_can_create_a_new_merchant
@@ -164,4 +149,17 @@ class MerchantRepositoryTest< MiniTest::Test
     assert_equal 12334141, result1.id
     assert_equal 474, merchant_repo.all.count
   end
+
+  def test_it_can_find_customers_for_merchant
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+      merchant_repo = MerchantRepository.new('./data/merchants.csv', se)
+      result = merchant_repo.all.first.customers
+      assert_nil result.first
+    end
 end
