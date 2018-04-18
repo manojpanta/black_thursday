@@ -5,7 +5,8 @@ require 'time'
 class InvoiceRepository
   attr_reader :path,
               :invoices,
-              :sales_engine
+              :sales_engine,
+              :merchant_ids
 
   def initialize(path, sales_engine)
     @sales_engine = sales_engine
