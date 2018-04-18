@@ -10,6 +10,7 @@ class ItemRepositoryTest < Minitest::Test
   def test_can_load_item
     item_repo = ItemRepository.new('./test/fixtures/items.csv', nil)
     assert_instance_of Array, item_repo.items
+    assert_instance_of Item, item_repo.items.first
     assert_equal 263395237, item_repo.items.first.id
   end
 

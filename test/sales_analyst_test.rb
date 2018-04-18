@@ -1,5 +1,6 @@
 require_relative 'test_helper'
 require_relative '../lib/sales_analyst'
+require_relative '../lib/merchant_repository'
 # this is sales analyst test
 class SalesAnalystTest < Minitest::Test
   def test_exists
@@ -24,7 +25,7 @@ class SalesAnalystTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv' })
 
     sales_analyst = SalesAnalyst.new(se)
-
+    assert_instance_of MerchantRepository, sales_analyst.merchant_repo
     assert_equal 'Shopin1901', sales_analyst.merchant_repo.all.first.name
     assert_equal 12334105, sales_analyst.merchant_repo.all.first.id
   end
@@ -38,10 +39,81 @@ class SalesAnalystTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv' })
 
     sales_analyst = SalesAnalyst.new(se)
-    expected = sales_analyst.item_repo.items.first.name
 
-    assert_equal '510+ RealPush Icon Set', expected
-    assert_equal 263395237, sales_analyst.item_repo.items.first.id
+    assert_instance_of ItemRepository, sales_analyst.item_repo
+    expected = sales_analyst.item_repo.items.first
+
+    assert_instance_of Item, expected
+    assert_equal '510+ RealPush Icon Set', expected.name
+    assert_equal 263395237, expected.id
+  end
+
+  def test_if_it_has_invoice_repo
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv' })
+
+    sales_analyst = SalesAnalyst.new(se)
+
+    assert_instance_of InvoiceRepository, sales_analyst.invoice_repo
+    expected = sales_analyst.invoice_repo.all.first
+
+    assert_instance_of Invoice, expected
+    assert_equal 1, expected.id
+  end
+
+  def test_if_it_has_invoice_item_repo
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv' })
+
+    sales_analyst = SalesAnalyst.new(se)
+
+    assert_instance_of InvoiceItemRepository, sales_analyst.invoice_item_repo
+    expected = sales_analyst.invoice_item_repo.all.first
+
+    assert_instance_of InvoiceItem, expected
+    assert_equal 1, expected.id
+  end
+
+  def test_if_it_has_transaction_repo
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv' })
+
+    sales_analyst = SalesAnalyst.new(se)
+
+    assert_instance_of TransactionRepository, sales_analyst.transaction_repo
+    expected = sales_analyst.transaction_repo.all.first
+
+    assert_instance_of Transaction, expected
+    assert_equal 1, expected.id
+  end
+
+  def test_if_it_has_customer_repo
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv' })
+
+    sales_analyst = SalesAnalyst.new(se)
+
+    assert_instance_of CustomerRepository, sales_analyst.customer_repo
+    expected = sales_analyst.customer_repo.all.first
+
+    assert_instance_of Customer, expected
+    assert_equal 1, expected.id
   end
 
   def test_sales_analyst_can_find_total_no_of_items_in_item_repo
