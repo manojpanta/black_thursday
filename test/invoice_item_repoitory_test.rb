@@ -8,6 +8,18 @@ class InvoiceItemRepositoryTest < Minitest::Test
     assert_instance_of InvoiceItemRepository, iir
   end
 
+  def test_invoice_item_is_a_hash
+    iir = InvoiceItemRepository.new('./test/fixtures/invoice_items.csv', nil)
+
+    assert_instance_of Hash, iir.invoice_items
+  end
+
+  def test_inoice_item_is_sorted_by_invoice_id_in_invoice_id_hash
+    iir = InvoiceItemRepository.new('./test/fixtures/invoice_items.csv', nil)
+
+    assert_equal 8, iir.invoice_id[1].count
+  end
+
   def test_it_can_load_all_invoice_items
     iir = InvoiceItemRepository.new('./test/fixtures/invoice_items.csv', nil)
 

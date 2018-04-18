@@ -28,6 +28,7 @@ class InvoiceItemTest < Minitest::Test
     assert_equal 5, ii.quantity
     assert_equal 136.35, ii.unit_price
     assert_equal 136.35, ii.unit_price_to_dollars
+    assert_instance_of Float, ii.unit_price_to_dollars
     assert_equal Time.parse(Time.now.to_s), ii.created_at
     assert_equal Time.parse(Time.now.to_s), ii.updated_at
   end

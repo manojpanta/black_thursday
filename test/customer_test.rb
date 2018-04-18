@@ -11,7 +11,7 @@ class CustomerTest < MiniTest::Test
     assert_instance_of Customer, customer
   end
 
-  def test_it_can_have_argument
+  def test_it_can_have_attributes
     customer = Customer.new({ :id => 1,
                               :first_name => 'tyler',
                               :last_name => 'westlie',

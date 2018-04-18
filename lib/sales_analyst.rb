@@ -19,7 +19,7 @@ class SalesAnalyst
   end
 
   def average_items_per_merchant
-    (item_repo.items.count.to_f / merchant_repo.merchants.count).round(2)
+    (item_repo.items.count.to_f / merchant_repo.all.count).round(2)
   end
 
   def average_items_per_merchant_standard_deviation
