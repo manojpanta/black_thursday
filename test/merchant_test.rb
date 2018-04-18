@@ -9,11 +9,16 @@ class MerchantTest < MiniTest::Test
     assert_instance_of Merchant, merchant
   end
 
-  def test_merchant_can_have_name_and_id
-    merchant = Merchant.new( {:id => 5, :name => 'Turing School' }, nil)
+  def test_attributes
+    merchant = Merchant.new( {:id => 5,
+                              :name => 'Turing School',
+                              :updated_at => "2011-01-23",
+                              :created_at => "2011-01-21" }, nil)
 
     assert_equal 'Turing School', merchant.name
     assert_equal 5, merchant.id
+    assert_equal "2011-01-23", merchant.updated_at
+    assert_equal "2011-01-21", merchant.created_at
   end
 
   def test_merchant_can_have_name_and_id_for_another_merchant
@@ -57,7 +62,7 @@ class MerchantTest < MiniTest::Test
                           :transactions => './test/fixtures/transactions.csv',
                           :customers => './test/fixtures/customers.csv'
                           })
-    merchant = se.merchants.all[2]
+    merchant = se.merchants.all[12]
     result = merchant.customers
     assert_nil result.first
   end
