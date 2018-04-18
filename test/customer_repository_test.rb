@@ -14,6 +14,12 @@ class TransactionRepositoryTest < Minitest::Test
     assert_equal './test/fixtures/customers.csv', cr.path
   end
 
+  def test_customers_is_an_array
+    cr = CustomerRepository.new('./test/fixtures/customers.csv', nil)
+
+    assert_instance_of Array, cr.customers
+  end
+
   def test_it_can_load_all_customers_from_csv
     cr = CustomerRepository.new('./test/fixtures/customers.csv', nil)
 
@@ -60,7 +66,7 @@ class TransactionRepositoryTest < Minitest::Test
     assert_equal [], result
   end
 
-  def test_finds_all_customers_by_first_name
+  def test_finds_all_customers_by_last_name
     cr = CustomerRepository.new('./test/fixtures/customers.csv', nil)
 
     result = cr.find_all_by_last_name('Nade')
