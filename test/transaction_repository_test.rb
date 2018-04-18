@@ -170,4 +170,10 @@ class TransactionRepositoryTest < Minitest::Test
 
       assert_nil tr.find_by_id(5)
     end
+
+    def test_it_can_find_invoice_for_a_transaction
+      tr = TransactionRepository.new('./test/fixtures/transactions.csv', nil)
+      
+
+    end
 end
