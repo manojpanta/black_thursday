@@ -76,4 +76,113 @@ class SalesEngineTest<Minitest::Test
     assert_instance_of Invoice, result
     assert_equal 5, result.id
   end
+
+  def test_it_can_find_invoices_for_merchant
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    result = se.invoices_for_merchant(2334105)
+    assert_equal [], result
+  end
+
+  def test_it_can_find_items_for_merchant
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    result = se.items_for_a_merchant(2334105)
+    assert_equal [], result
+  end
+
+  def test_it_can_find_customers_for_merchant
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    result = se.find_customers_for_a_merchant(1)
+    assert_equal "Joey", result.first_name
+  end
+
+  def test_it_can_find_merchant_for_invoice
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    result = se.find_merchant_for_a_invoice(2334105)
+    assert_nil result
+  end
+
+  def test_it_can_find_merchant_of_an_item
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    result = se.find_merchant_of_a_item(2334105)
+    assert_nil result
+  end
+
+  def test_it_can_find_transactions_of_a_invoice
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    result = se.find_transactions_for_a_invoice(1)
+    assert_equal [], result
+  end
+
+  def test_it_can_find_customer_of_a_invoice
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    result = se.find_customer_of_a_invoice(1)
+    assert_equal "Joey", result.first_name
+  end
+
+  def test_it_can_find_invoice_for_a_transaction
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    result = se.find_invoice_for_a_transaction(1)
+    assert_equal 1, result.id
+  end
+
+  def test_it_can_find_invoice_item_for_a_invoice
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    result = se.find_invoice_item_for_a_invoice(1)
+    assert_instance_of InvoiceItem, result.first
+    assert_equal 1, result.first.id
+  end
 end

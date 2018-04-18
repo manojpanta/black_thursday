@@ -8,6 +8,11 @@ class MerchantRepositoryTest< MiniTest::Test
     assert_instance_of MerchantRepository, merchant_repo
   end
 
+  def test_merchants_is_a_hash
+    merchant_repo = MerchantRepository.new('./data/merchants.csv', nil)
+    assert_instance_of Hash, merchant_repo.merchants
+  end
+
   def test_it_can_load_all_data
     merchant_repo = MerchantRepository.new('./data/merchants.csv', nil)
     assert_equal 475, merchant_repo.all.count
