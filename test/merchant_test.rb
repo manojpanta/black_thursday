@@ -35,4 +35,43 @@ class MerchantTest < MiniTest::Test
     result = merchant.invoices
     assert_equal [], result
   end
+
+  def test_returns_merchant_revenue
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    merchant = se.merchants.all[2]
+    result = merchant.revenue
+    assert_equal 0, result
+  end
+
+  def test_returns_merchant_customers
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    merchant = se.merchants.all[2]
+    result = merchant.customers
+    assert_nil result.first
+  end
+
+  def test_returns_merchant_items
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    merchant = se.merchants.all[2]
+    result = merchant.items
+    assert_equal 1, result.count
+  end
 end
