@@ -8,9 +8,9 @@ class MerchantRepositoryTest< MiniTest::Test
     assert_instance_of MerchantRepository, merchant_repo
   end
 
-  def test_merchants_is_a_hash
+  def test_merchants_is_a_array
     merchant_repo = MerchantRepository.new('./data/merchants.csv', nil)
-    assert_instance_of Hash, merchant_repo.merchants
+    assert_instance_of Array, merchant_repo.all
   end
 
   def test_it_can_load_all_data
@@ -141,7 +141,7 @@ class MerchantRepositoryTest< MiniTest::Test
     result1 = merchant_repo.delete(12334132)
     assert_equal 'perlesemoi', result1.name
     assert_equal 12334132, result1.id
-    assert_equal 474, merchant_repo.merchants.count
+    assert_equal 474, merchant_repo.all.count
   end
 
   def test_it_can_delete_merchants_from_the_list_for_diff_id

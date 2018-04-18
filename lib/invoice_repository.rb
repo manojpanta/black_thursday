@@ -1,10 +1,11 @@
 require 'csv'
 require_relative 'invoice'
 require 'time'
+require_relative './module/hash_repository'
 # this is invoice repo
 class InvoiceRepository
+  include HashRepository
   attr_reader :path,
-              :invoices,
               :sales_engine,
               :merchant_ids
 

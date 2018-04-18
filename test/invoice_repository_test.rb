@@ -14,10 +14,10 @@ class InvoiceRepositoryTest < Minitest::Test
     assert_equal './test/fixtures/invoices.csv', ir.path
   end
 
-  def test_invoices_is_a_hash
+  def test_invoices_is_a_array
     ir = InvoiceRepository.new('./test/fixtures/invoices.csv', nil)
 
-    assert_instance_of Hash, ir.invoices
+    assert_instance_of Array, ir.all
   end
 
   def test_merchant_ids_hash_has_array_of_invoices_by_merchant_id
@@ -41,7 +41,7 @@ class InvoiceRepositoryTest < Minitest::Test
     ir = InvoiceRepository.new('./test/fixtures/invoices.csv', nil)
 
     assert_instance_of Array, ir.all
-    assert_equal 4985, ir.invoices.count
+    assert_equal 4985, ir.all.count
   end
 
   def test_find_by_id_returns_invoice
