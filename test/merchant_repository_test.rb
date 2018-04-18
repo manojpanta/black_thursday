@@ -163,6 +163,6 @@ class MerchantRepositoryTest< MiniTest::Test
                           :customers => './test/fixtures/customers.csv' })
     merchant_repo = MerchantRepository.new('./data/merchants.csv', se)
     result = merchant_repo.all.first.customers
-    assert_nil result.first
+    assert_equal 'Casimer', result.first.first_name
   end
 end

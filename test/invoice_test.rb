@@ -64,7 +64,8 @@ class InvoiceTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv'
                           })
     invoice = se.invoices.all.last
-    assert_equal [], invoice.transactions
+    assert_equal 1, invoice.transactions.count
+    assert_equal 3607, invoice.transactions.first.id
   end
 
   def test_it_can_find_customer_for_a_invoice
@@ -75,8 +76,8 @@ class InvoiceTest < Minitest::Test
                           :transactions => './test/fixtures/transactions.csv',
                           :customers => './test/fixtures/customers.csv'
                           })
-    invoice = se.invoices.all.last
-    assert_equal "Sylvester", invoice.customer.first_name
+    invoice = se.invoices.all[199]
+    assert_equal "Maryam", invoice.customer.first_name
   end
 
   def test_if_invoice_is_paid_in_full?
@@ -101,6 +102,6 @@ class InvoiceTest < Minitest::Test
                           })
     invoice = se.invoices.all.first
 
-    assert_nil invoice.invoice_total(invoice.id)
+    assert_equal 21067.77, invoice.invoice_total(invoice.id).to_f
   end
 end

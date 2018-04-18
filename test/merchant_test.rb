@@ -38,7 +38,8 @@ class MerchantTest < MiniTest::Test
                           })
     merchant = se.merchants.all[2]
     result = merchant.invoices
-    assert_equal [], result
+    assert_equal 12, result.length
+    assert_equal 548, result.first.id
   end
 
   def test_returns_merchant_revenue
@@ -51,7 +52,7 @@ class MerchantTest < MiniTest::Test
                           })
     merchant = se.merchants.all[2]
     result = merchant.revenue
-    assert_equal 0, result
+    assert_equal 73426.08, result
   end
 
   def test_returns_merchant_customers
@@ -62,9 +63,11 @@ class MerchantTest < MiniTest::Test
                           :transactions => './test/fixtures/transactions.csv',
                           :customers => './test/fixtures/customers.csv'
                           })
-    merchant = se.merchants.all[12]
+    merchant = se.merchants.all[4]
     result = merchant.customers
-    assert_nil result.first
+    assert_equal 4, result.length
+    assert_instance_of Customer, result.first
+    assert_equal 'Henderson', result.first.first_name
   end
 
   def test_returns_merchant_items
@@ -77,6 +80,7 @@ class MerchantTest < MiniTest::Test
                           })
     merchant = se.merchants.all[2]
     result = merchant.items
+    assert_instance_of Item, result.first
     assert_equal 1, result.count
   end
 end

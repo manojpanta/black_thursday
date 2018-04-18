@@ -18,12 +18,12 @@ class TransactionRepositoryTest < Minitest::Test
   def test_it_can_load_all_transaction_from_csv
     tr = TransactionRepository.new('./test/fixtures/transactions.csv', nil)
 
-    assert_equal 200, tr.all.count
+    assert_equal 4985, tr.all.count
     assert_equal 2179, tr.all.first.invoice_id
     assert_equal '4068631943231473', tr.all.first.credit_card_number
     assert_equal '0217', tr.all.first.credit_card_expiration_date
     assert_equal :success, tr.all.first.result
-    assert_equal 200, tr.all.last.id
+    assert_equal 4985, tr.all.last.id
   end
 
   def test_it_can_find_by_id
@@ -51,7 +51,7 @@ class TransactionRepositoryTest < Minitest::Test
 
     result = tr.find_all_by_invoice_id(46)
 
-    assert_equal 1, result.count
+    assert_equal 2, result.count
     assert_equal :success, result.first.result
   end
 
@@ -85,8 +85,8 @@ class TransactionRepositoryTest < Minitest::Test
     result = tr.find_all_by_result(:success)
     result1 = tr.find_all_by_result(:failed)
 
-    assert_equal 162, result.count
-    assert_equal 38, result1.count
+    assert_equal 4158, result.count
+    assert_equal 827, result1.count
 
     result3 = result1.count + result.count
 
@@ -96,28 +96,28 @@ class TransactionRepositoryTest < Minitest::Test
   def test_it_can_create_new_id
     tr = TransactionRepository.new('./test/fixtures/transactions.csv', nil)
 
-    assert_equal 200, tr.transactions.count
+    assert_equal 4985, tr.transactions.count
 
-    assert_equal 201, tr.create_new_id
+    assert_equal 4986, tr.create_new_id
   end
 
   def test_it_can_create_new_transaction
     tr = TransactionRepository.new('./test/fixtures/transactions.csv', nil)
 
-    assert_nil tr.find_by_id(201)
+    assert_nil tr.find_by_id(4986)
 
     result = tr.create({ :invoice_id => 1,
                          :credit_card_number => 1234567,
                          :credit_card_expiration_date => '0102',
                          :result => 'failed' })
 
-    result1 = tr.find_by_id(201)
+    result1 = tr.find_by_id(4986)
 
     assert_equal 1, result1.invoice_id
     assert_equal 1234567, result1.credit_card_number
     assert_equal '0102', result1.credit_card_expiration_date
     assert_equal :failed, result1.result
-    assert_equal 201, result1.id
+    assert_equal 4986, result1.id
   end
 
 
@@ -183,6 +183,6 @@ class TransactionRepositoryTest < Minitest::Test
       transaction_repo = se.transactions
       trscn = transaction_repo.all.first
       result = transaction_repo.find_invoice_for_a_transaction(trscn.invoice_id)
-      assert_nil result
+      assert_equal 2179, result.id
     end
 end

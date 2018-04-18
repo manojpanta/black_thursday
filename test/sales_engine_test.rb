@@ -146,7 +146,8 @@ class SalesEngineTest<Minitest::Test
                           :customers => './test/fixtures/customers.csv'
                           })
     result = se.find_transactions_for_a_invoice(1)
-    assert_equal [], result
+    assert_equal 2650, result.first.id
+    assert_equal 2, result.length
   end
 
   def test_it_can_find_customer_of_a_invoice

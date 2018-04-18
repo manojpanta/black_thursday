@@ -24,13 +24,14 @@ class InvoiceRepositoryTest < Minitest::Test
     ir = InvoiceRepository.new('./test/fixtures/invoices.csv', nil)
 
     assert_instance_of Array, ir.merchant_ids.values.first
-    assert_equal [], ir.merchant_ids[12334141]
+    assert_equal 18, ir.merchant_ids[12334141].count
+    assert_equal 641, ir.merchant_ids[12334141].first.id
   end
 
   def test_it_can_load_invoices_from_path_given
     ir = InvoiceRepository.new('./test/fixtures/invoices.csv', nil)
 
-    assert_equal 20, ir.all.count
+    assert_equal 4985, ir.all.count
     assert_equal 12335938, ir.all.first.merchant_id
     assert_equal 1, ir.all.first.id
     assert_equal 1, ir.all.first.customer_id
@@ -40,7 +41,7 @@ class InvoiceRepositoryTest < Minitest::Test
     ir = InvoiceRepository.new('./test/fixtures/invoices.csv', nil)
 
     assert_instance_of Array, ir.all
-    assert_equal 20, ir.invoices.count
+    assert_equal 4985, ir.invoices.count
   end
 
   def test_find_by_id_returns_invoice
@@ -97,7 +98,7 @@ class InvoiceRepositoryTest < Minitest::Test
 
     result = ir.find_all_by_merchant_id(12335938)
 
-    assert_equal 1, result.count
+    assert_equal 16, result.count
   end
 
   def test_it_returns_empty_array_for_invalid_merchant_id
@@ -113,7 +114,7 @@ class InvoiceRepositoryTest < Minitest::Test
 
     result = ir.find_all_by_status(:pending)
 
-    assert_equal 9, result.count
+    assert_equal 1473, result.count
   end
 
   def test_it_returns_empty_array_for_invalid_status
@@ -126,19 +127,19 @@ class InvoiceRepositoryTest < Minitest::Test
 
   def test_it_can_create_new_invoice_id
     ir = InvoiceRepository.new('./test/fixtures/invoices.csv', nil)
-    assert_equal 20, ir.all.count
+    assert_equal 4985, ir.all.count
 
-    assert_equal 21, ir.create_new_id
+    assert_equal 4986, ir.create_new_id
   end
 
   def test_it_can_create_new_invoice_object
     ir = InvoiceRepository.new('./test/fixtures/invoices.csv', nil)
-    assert_equal 21, ir.create_new_id
+    assert_equal 4986, ir.create_new_id
 
     result = ir.create({ :customer_id => 2,
                          :merchant_id => 3,
                          :status =>  'pending' })
-    assert_equal 21, result.id
+    assert_equal 4986, result.id
     assert_equal :pending, result.status
   end
 
@@ -250,8 +251,8 @@ class InvoiceRepositoryTest < Minitest::Test
     ir = InvoiceRepository.new('./test/fixtures/invoices.csv', se)
 
     result = ir.find_transactions_for_a_invoice(1)
-    assert_equal 0, result.length
-    assert_nil result.first
+    assert_equal 2, result.length
+    assert_equal 2650, result.first.id
   end
 
   def test_it_can_find_merchant_for_a_invoice

@@ -57,6 +57,6 @@ class TransactionTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv' })
     transaction = se.transactions.all.first
     result = transaction.invoice
-    assert_nil result
+    assert_equal 2179, result.id
   end
 end

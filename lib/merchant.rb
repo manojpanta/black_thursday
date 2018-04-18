@@ -37,7 +37,7 @@ class Merchant
 
   def customers
     invoices.map do |invoice|
-      @merchant_repo.find_customer_for_a_merchant(invoice.customer_id)
+      @merchant_repo.find_customers_for_a_merchant(invoice.customer_id)
     end.uniq
   end
 end

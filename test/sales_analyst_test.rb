@@ -25,9 +25,9 @@ class SalesAnalystTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv' })
 
     sales_analyst = SalesAnalyst.new(se)
-    assert_instance_of MerchantRepository, sales_analyst.merchant_repo
-    assert_equal 'Shopin1901', sales_analyst.merchant_repo.all.first.name
-    assert_equal 12334105, sales_analyst.merchant_repo.all.first.id
+    assert_instance_of MerchantRepository, sales_analyst.sales_engine.merchants
+    assert_equal 'Shopin1901', sales_analyst.sales_engine.merchants.all.first.name
+    assert_equal 12334105, sales_analyst.sales_engine.merchants.all.first.id
   end
 
   def test_if_it_has_items_repo
@@ -40,8 +40,8 @@ class SalesAnalystTest < Minitest::Test
 
     sales_analyst = SalesAnalyst.new(se)
 
-    assert_instance_of ItemRepository, sales_analyst.item_repo
-    expected = sales_analyst.item_repo.items.first
+    assert_instance_of ItemRepository, sales_analyst.sales_engine.items
+    expected = sales_analyst.sales_engine.items.all.first
 
     assert_instance_of Item, expected
     assert_equal '510+ RealPush Icon Set', expected.name
@@ -58,8 +58,8 @@ class SalesAnalystTest < Minitest::Test
 
     sales_analyst = SalesAnalyst.new(se)
 
-    assert_instance_of InvoiceRepository, sales_analyst.invoice_repo
-    expected = sales_analyst.invoice_repo.all.first
+    assert_instance_of InvoiceRepository, sales_analyst.sales_engine.invoices
+    expected = sales_analyst.sales_engine.invoices.all.first
 
     assert_instance_of Invoice, expected
     assert_equal 1, expected.id
@@ -75,8 +75,8 @@ class SalesAnalystTest < Minitest::Test
 
     sales_analyst = SalesAnalyst.new(se)
 
-    assert_instance_of InvoiceItemRepository, sales_analyst.invoice_item_repo
-    expected = sales_analyst.invoice_item_repo.all.first
+    assert_instance_of InvoiceItemRepository, sales_analyst.sales_engine.invoice_items
+    expected = sales_analyst.sales_engine.invoice_items.all.first
 
     assert_instance_of InvoiceItem, expected
     assert_equal 1, expected.id
@@ -92,8 +92,8 @@ class SalesAnalystTest < Minitest::Test
 
     sales_analyst = SalesAnalyst.new(se)
 
-    assert_instance_of TransactionRepository, sales_analyst.transaction_repo
-    expected = sales_analyst.transaction_repo.all.first
+    assert_instance_of TransactionRepository, sales_analyst.sales_engine.transactions
+    expected = sales_analyst.sales_engine.transactions.all.first
 
     assert_instance_of Transaction, expected
     assert_equal 1, expected.id
@@ -109,8 +109,8 @@ class SalesAnalystTest < Minitest::Test
 
     sales_analyst = SalesAnalyst.new(se)
 
-    assert_instance_of CustomerRepository, sales_analyst.customer_repo
-    expected = sales_analyst.customer_repo.all.first
+    assert_instance_of CustomerRepository, sales_analyst.sales_engine.customers
+    expected = sales_analyst.sales_engine.customers.all.first
 
     assert_instance_of Customer, expected
     assert_equal 1, expected.id
@@ -125,7 +125,7 @@ class SalesAnalystTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv' })
     sales_analyst = SalesAnalyst.new(se)
 
-    assert_equal 1367, sales_analyst.item_repo.items.count
+    assert_equal 1367, sales_analyst.sales_engine.items.all.count
   end
 
   def test_sales_analyst_finds_total_no_of_items_in_item_repo
@@ -137,7 +137,7 @@ class SalesAnalystTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv' })
     sales_analyst = SalesAnalyst.new(se)
 
-    assert_equal 475, sales_analyst.merchant_repo.merchants.count
+    assert_equal 475, sales_analyst.sales_engine.merchants.all.count
   end
 
   def test_it_can_find_average_items_per_merchants
@@ -247,7 +247,7 @@ class SalesAnalystTest < Minitest::Test
 
     sales_analyst = SalesAnalyst.new(se)
 
-    assert_equal 1.11, sales_analyst.average_invoices_per_merchant
+    assert_equal 10.49, sales_analyst.average_invoices_per_merchant
   end
 
   def test_it_can_calculate_average_invoices_per_merchant_standard_deviation
@@ -260,7 +260,7 @@ class SalesAnalystTest < Minitest::Test
     sales_analyst = SalesAnalyst.new(se)
     expected = sales_analyst.average_invoices_per_merchant_standard_deviation
 
-    assert_equal 1.09, expected
+    assert_equal 3.29, expected
   end
 
   def test_it_can_calculate_top_merchants_by_invoice_count
@@ -272,7 +272,7 @@ class SalesAnalystTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv' })
     sales_analyst = SalesAnalyst.new(se)
 
-    assert_equal 0, sales_analyst.top_merchants_by_invoice_count.count
+    assert_equal 12, sales_analyst.top_merchants_by_invoice_count.count
   end
 
   def test_it_can_calculate_bottom_merchants_by_invoice_count
@@ -284,9 +284,9 @@ class SalesAnalystTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv' })
     sales_analyst = SalesAnalyst.new(se)
 
-    assert_equal 0, sales_analyst.bottom_merchants_by_invoice_count.count
+    assert_equal 4, sales_analyst.bottom_merchants_by_invoice_count.count
     assert_equal 7, sales_analyst.organize_invoices_by_days_of_the_week.count
-    assert_equal 2.24, sales_analyst.stddv_for_invoices
+    assert_equal 18.06, sales_analyst.stddv_for_invoices
   end
 
   def test_it_can_find_top_days_by_invoice_count
@@ -298,7 +298,7 @@ class SalesAnalystTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv' })
       sales_analyst = SalesAnalyst.new(se)
 
-    assert_equal 'Saturday', sales_analyst.top_days_by_invoice_count.first
+    assert_equal 'Wednesday', sales_analyst.top_days_by_invoice_count.first
   end
 
   def test_it_can_find_percentage_of_each_status
@@ -310,9 +310,9 @@ class SalesAnalystTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv' })
     sales_analyst = SalesAnalyst.new(se)
 
-    assert_equal 45.0, sales_analyst.invoice_status(:pending)
-    assert_equal 55.0, sales_analyst.invoice_status(:shipped)
-    assert_equal 0.0, sales_analyst.invoice_status(:returned)
+    assert_equal 29.55, sales_analyst.invoice_status(:pending)
+    assert_equal 56.95, sales_analyst.invoice_status(:shipped)
+    assert_equal 13.5, sales_analyst.invoice_status(:returned)
   end
 
   def test_if_it_can_check_if_invoice_paid_in_full
@@ -336,7 +336,7 @@ class SalesAnalystTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv' })
     sales_analyst = SalesAnalyst.new(se)
 
-    assert_equal false, sales_analyst.invoice_paid_in_full?(4702)
+    assert_equal false, sales_analyst.invoice_paid_in_full?(4703)
   end
 
   def test_if_invoice_id_returns_invoice_total
@@ -384,7 +384,7 @@ class SalesAnalystTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv' })
     sales_analyst = SalesAnalyst.new(se)
 
-    assert_equal 17, sales_analyst.merchants_with_pending_invoices.count
+    assert_equal 467, sales_analyst.merchants_with_pending_invoices.count
   end
 
   def test_it_can_find_merchant_with_ony_one_item
@@ -419,7 +419,7 @@ class SalesAnalystTest < Minitest::Test
                           :transactions => './test/fixtures/transactions.csv',
                           :customers => './test/fixtures/customers.csv' })
     sales_analyst = SalesAnalyst.new(se)
-    assert_equal 0, sales_analyst.revenue_by_merchant(12334194)
+    assert_equal 81572.4, sales_analyst.revenue_by_merchant(12334194).to_f
   end
 
   def test_it_can_return_most_sold_item_for_merchant
@@ -431,7 +431,7 @@ class SalesAnalystTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv' })
     sales_analyst = SalesAnalyst.new(se)
     result = sales_analyst.most_sold_item_for_merchant(12335150)
-    assert_equal 'Mounted Stag Picture', result.first.name
+    assert_equal 'Take me Home', result.first.name
   end
 
   def test_it_can_return_best_item_for_a_merchant
@@ -443,7 +443,7 @@ class SalesAnalystTest < Minitest::Test
                           :customers => './test/fixtures/customers.csv' })
     sales_analyst = SalesAnalyst.new(se)
     result = sales_analyst.best_item_for_merchant(12335150)
-    assert_equal 'Sale Timberland Tee Shirt For Kids', result.name
+    assert_equal 'Florida Everglades Trash Art', result.name
   end
 
   def test_it_returns_best_item_for_a_merchant
@@ -456,6 +456,6 @@ class SalesAnalystTest < Minitest::Test
 
     sales_analyst = SalesAnalyst.new(se)
     result = sales_analyst.best_item_for_merchant(12335150)
-    assert_equal 'Sale Timberland Tee Shirt For Kids', result.name
+    assert_equal 'Florida Everglades Trash Art', result.name
   end
 end

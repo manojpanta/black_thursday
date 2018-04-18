@@ -17,7 +17,7 @@ class TransactionRepositoryTest < Minitest::Test
   def test_customers_is_an_array
     cr = CustomerRepository.new('./test/fixtures/customers.csv', nil)
 
-    assert_instance_of Array, cr.customers
+    assert_instance_of Array, cr.models
   end
 
   def test_it_can_load_all_customers_from_csv
@@ -88,7 +88,7 @@ class TransactionRepositoryTest < Minitest::Test
   def test_it_can_create_new_customer_id
     cr = CustomerRepository.new('./test/fixtures/customers.csv', nil)
 
-    assert_equal 200, cr.customers.count
+    assert_equal 200, cr.all.count
 
     assert_equal 201, cr.create_new_id
   end
@@ -96,7 +96,7 @@ class TransactionRepositoryTest < Minitest::Test
   def test_it_can_create_new_customer
     cr = CustomerRepository.new('./test/fixtures/customers.csv', nil)
 
-    assert_equal 200, cr.customers.count
+    assert_equal 200, cr.all.count
 
     assert_nil cr.find_by_id(201)
 

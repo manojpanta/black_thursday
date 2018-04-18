@@ -23,7 +23,7 @@ class InvoiceItemRepositoryTest < Minitest::Test
   def test_it_can_load_all_invoice_items
     iir = InvoiceItemRepository.new('./test/fixtures/invoice_items.csv', nil)
 
-    assert_equal 199, iir.all.count
+    assert_equal 21830, iir.all.count
     assert_equal 1, iir.all.first.id
     assert_equal 263519844, iir.all.first.item_id
     assert_equal 1, iir.all.first.invoice_id
@@ -88,20 +88,20 @@ class InvoiceItemRepositoryTest < Minitest::Test
   def test_it_can_create_new_id
     iir = InvoiceItemRepository.new('./test/fixtures/invoice_items.csv', nil)
 
-    assert_equal 200, iir.create_new_id
+    assert_equal 21831, iir.create_new_id
   end
 
   def test_it_Can_create_new_invoice_item
     iir = InvoiceItemRepository.new('./test/fixtures/invoice_items.csv', nil)
 
-    assert_equal 200, iir.create_new_id
+    assert_equal 21831, iir.create_new_id
 
     iir.create({ :item_id => 2,
                  :invoice_id => 1000,
                  :quantity => 4,
                  :unit_price => 1600 })
 
-    result = iir.find_by_id(200)
+    result = iir.find_by_id(21831)
 
     assert_equal 2, result.item_id
     assert_equal 1000, result.invoice_id

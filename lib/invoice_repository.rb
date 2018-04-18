@@ -11,7 +11,7 @@ class InvoiceRepository
   def initialize(path, sales_engine)
     @sales_engine = sales_engine
     @path         = path
-    @invoices     = {}
+    @models       = {}
     @merchant_ids = Hash.new { |h, k| h[k] = [] }
     load_path(path)
   end
@@ -19,22 +19,14 @@ class InvoiceRepository
   def load_path(path)
     CSV.foreach(path, headers: true, header_converters: :symbol) do |data|
       invoice = Invoice.new(data, self)
-      @invoices[invoice.id] = invoice
+      @models[invoice.id] = invoice
       @merchant_ids[invoice.merchant_id] << invoice
     end
   end
 
-  def all
-    @invoices.values
-  end
-
-  def find_by_id(id)
-    @invoices[id]
-  end
-
   def find_all_by_customer_id(customer_id)
-    all.find_all do |invoice|
-      invoice.customer_id == customer_id
+    all.find_all do |model|
+      model.customer_id == customer_id
     end
   end
 
@@ -43,22 +35,16 @@ class InvoiceRepository
   end
 
   def find_all_by_status(status)
-    all.find_all do |invoice|
-      invoice.status == status
+    all.find_all do |model|
+      model.status == status
     end
-  end
-
-  def create_new_id
-    all.map do |invoice|
-      invoice.id
-    end.max + 1
   end
 
   def create(attributes)
     attributes[:id] = create_new_id
     attributes[:created_at] = Time.now.strftime('%F')
     attributes[:updated_at] = Time.now.strftime('%F')
-    @invoices[attributes[:id]] = Invoice.new(attributes, self)
+    @models[attributes[:id]] = Invoice.new(attributes, self)
   end
 
   def update(id, attributes)
@@ -68,13 +54,9 @@ class InvoiceRepository
     to_update.update_status(attributes[:status].to_sym) if attributes[:status]
   end
 
-  def delete(id)
-    @invoices.delete(id)
-  end
-
   def total_invoices_for_a_date(date)
-    all.map do |invoice|
-      invoice if invoice.created_at == date
+    all.map do |model|
+      model if model.created_at == date
     end.compact
   end
 
@@ -95,6 +77,6 @@ class InvoiceRepository
   end
 
   def inspect
-    "#<#{self.class} #{@invoices.size} rows>"
+    "#<#{self.class} #{@models.size} rows>"
   end
 end

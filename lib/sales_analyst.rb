@@ -2,14 +2,9 @@ require_relative 'sales_engine'
 require 'time'
 # this is sales analyst class
 class SalesAnalyst
-  attr_reader :merchant_repo,
-              :item_repo,
-              :invoice_repo,
-              :invoice_item_repo,
-              :transaction_repo,
-              :customer_repo
-
+  attr_reader :sales_engine
   def initialize(sales_engine)
+    @sales_engine       = sales_engine
     @merchant_repo      = sales_engine.merchants
     @item_repo          = sales_engine.items
     @invoice_repo       = sales_engine.invoices
@@ -19,24 +14,24 @@ class SalesAnalyst
   end
 
   def average_items_per_merchant
-    (item_repo.items.count.to_f / merchant_repo.all.count).round(2)
+    (@item_repo.items.count.to_f / @merchant_repo.all.count).round(2)
   end
 
   def average_items_per_merchant_standard_deviation
-    numbers_of_item = merchant_repo.all.map do |merchant|
+    numbers_of_item = @merchant_repo.all.map do |merchant|
       merchant.items.count
     end
-    a = numbers_of_item.reduce(0) do |sum, number|
+    total = numbers_of_item.reduce(0) do |sum, number|
       sum + (number - average_items_per_merchant) ** 2
     end / (numbers_of_item.count - 1)
-    Math.sqrt(a).round(2)
+    Math.sqrt(total).round(2)
   end
 
   def merchants_with_high_item_count
     average = average_items_per_merchant
     standard_deviation = average_items_per_merchant_standard_deviation
     one_stddv = average + standard_deviation
-    merchant_repo.all.map do |merchant|
+    @merchant_repo.all.map do |merchant|
       merchant if merchant.items.count > one_stddv
     end.compact
   end
@@ -64,10 +59,10 @@ class SalesAnalyst
 
   def standard_deviation_for_item_price
     average_price = average_price_of_items
-    a = @item_repo.items.reduce(0) do |sum, item|
+    total = @item_repo.items.reduce(0) do |sum, item|
       sum + (item.unit_price - average_price) ** 2
     end / (@item_repo.items.count - 1)
-    Math.sqrt(a).round(2)
+    Math.sqrt(total).round(2)
   end
 
   def golden_items
@@ -86,25 +81,25 @@ class SalesAnalyst
   end
 
   def average_invoices_per_merchant_standard_deviation
-    a = average_invoices_per_merchant
+    average = average_invoices_per_merchant
     numbers_of_merchants = @merchant_repo.merchants.count
-    a = @merchant_repo.all.reduce(0) do |sum, merchant|
-      sum + (merchant.invoices.count - a) ** 2
+    total = @merchant_repo.all.reduce(0) do |sum, merchant|
+      sum + (merchant.invoices.count - average) ** 2
     end / (numbers_of_merchants - 1)
-    Math.sqrt(a).round(2)
+    Math.sqrt(total).round(2)
   end
 
   def top_merchants_by_invoice_count
-    a = (average_invoices_per_merchant_standard_deviation * 2)
-    two_standard_deviation = average_invoices_per_merchant + a
+    average_double = (average_invoices_per_merchant_standard_deviation * 2)
+    two_standard_deviation = average_invoices_per_merchant + average_double
     @merchant_repo.all.map do |merchant|
       merchant if merchant.invoices.count > two_standard_deviation
     end.compact
   end
 
   def bottom_merchants_by_invoice_count
-    a = (average_invoices_per_merchant_standard_deviation * 2)
-    two_standard_deviation = average_invoices_per_merchant - a
+    average_double = (average_invoices_per_merchant_standard_deviation * 2)
+    two_standard_deviation = average_invoices_per_merchant - average_double
     @merchant_repo.all.map do |merchant|
       merchant if merchant.invoices.count < two_standard_deviation
     end.compact
@@ -121,10 +116,10 @@ class SalesAnalyst
   end
 
   def stddv_for_invoices
-    a = organize_invoices_by_days_of_the_week.reduce(0) do |sum, (key, value)|
+    total = organize_invoices_by_days_of_the_week.reduce(0) do |sum, (key, value)|
       sum + (value.count - average_number_of_invoices_per_day) ** 2
     end / 6
-    Math.sqrt(a).round(2)
+    Math.sqrt(total).round(2)
   end
 
   def top_days_by_invoice_count
@@ -149,20 +144,20 @@ class SalesAnalyst
   end
 
   def invoice_total(invoice_id)
-    @invoice_item_repo.find_all_by_invoice_id(invoice_id).reduce(0) do |sum,iit|
+    @invoice_item_repo.find_all_by_invoice_id(invoice_id).reduce(0) do |sum, iit|
       sum + (iit.quantity * iit.unit_price)
     end
   end
 
   def total_revenue_by_date(date)
-    invoices = invoice_repo.total_invoices_for_a_date(date)
+    invoices = @invoice_repo.total_invoices_for_a_date(date)
     invoices.reduce(0) do |total, invoice|
       total + invoice_total(invoice.id)
     end
   end
 
   def merchants_ranked_by_revenue
-    merchant_repo.all.sort_by do |merchant|
+    @merchant_repo.all.sort_by do |merchant|
       merchant.revenue
     end.reverse
   end
@@ -172,15 +167,15 @@ class SalesAnalyst
   end
 
   def merchants_with_pending_invoices
-    invoice_repo.all.map do |invoice|
+    @invoice_repo.all.map do |invoice|
       unless invoice.is_paid_in_full?
-        merchant_repo.find_by_id(invoice.merchant_id)
+        @merchant_repo.find_by_id(invoice.merchant_id)
       end
     end.compact.uniq
   end
 
   def merchants_with_only_one_item
-    merchant_repo.all.map do |merchant|
+    @merchant_repo.all.map do |merchant|
       merchant if merchant.items.count == 1
     end.compact
   end
@@ -193,14 +188,14 @@ class SalesAnalyst
   end
 
   def revenue_by_merchant(merchant_id)
-    merchant_repo.find_by_id(merchant_id).revenue
+    @merchant_repo.find_by_id(merchant_id).revenue
   end
 
   def invoice_items_for_a_merchant(merchant_id)
-    merchant_invoices = merchant_repo.find_by_id(merchant_id).invoices
+    merchant_invoices = @merchant_repo.find_by_id(merchant_id).invoices
     merchant_invoices.map do |invoice|
       if invoice.is_paid_in_full?
-        invoice_item_repo.find_all_by_invoice_id(invoice.id)
+        @invoice_item_repo.find_all_by_invoice_id(invoice.id)
       end
     end.flatten.compact
   end
@@ -216,7 +211,7 @@ class SalesAnalyst
     sort_invoice_items_by_quantity(merchant_id).delete_if do |invoice|
       invoice.quantity != winner
     end.map do |invoice_item|
-      item_repo.find_by_id(invoice_item.item_id)
+      @item_repo.find_by_id(invoice_item.item_id)
     end
   end
 
@@ -224,6 +219,6 @@ class SalesAnalyst
     iitem = invoice_items_for_a_merchant(merchant_id).sort_by do |invoice_item|
       invoice_item.revenue_out_of_one_invoice_item
     end.reverse.first
-    item_repo.find_by_id(iitem.item_id)
+    @item_repo.find_by_id(iitem.item_id)
   end
 end

@@ -1,6 +1,8 @@
 require 'time'
+require_relative'./module/repository'
 # this is customer class
 class Customer
+  include Repository
   attr_reader :id,
               :first_name,
               :last_name,
