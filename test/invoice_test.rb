@@ -101,6 +101,6 @@ class InvoiceTest < Minitest::Test
                           })
     invoice = se.invoices.all.first
 
-    assert_equal nil, invoice.invoice_total(invoice.id)
+    assert_nil invoice.invoice_total(invoice.id)
   end
 end

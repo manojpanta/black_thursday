@@ -1,5 +1,6 @@
 require_relative 'test_helper'
 require './lib/transaction_repository'
+require './lib/sales_engine'
 # this is transaction repo test
 class TransactionRepositoryTest < Minitest::Test
   def test_exists
@@ -172,8 +173,16 @@ class TransactionRepositoryTest < Minitest::Test
     end
 
     def test_it_can_find_invoice_for_a_transaction
-      tr = TransactionRepository.new('./test/fixtures/transactions.csv', nil)
-      
-
+      se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                            :merchants => './test/fixtures/merchants.csv',
+                            :invoices => './test/fixtures/invoices.csv',
+                            :invoice_items => './test/fixtures/invoice_items.csv',
+                            :transactions => './test/fixtures/transactions.csv',
+                            :customers => './test/fixtures/customers.csv'
+                            })
+      transaction_repo = se.transactions
+      trscn = transaction_repo.all.first
+      result = transaction_repo.find_invoice_for_a_transaction(trscn.invoice_id)
+      assert_nil result
     end
 end

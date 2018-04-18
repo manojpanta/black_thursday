@@ -48,16 +48,6 @@ class TransactionTest < Minitest::Test
     assert_equal :pending, transaction.result
   end
 
-  def test_it_can_find_invoice_for_transaction
-    assert_equal 1234, transaction.update_credit_card_number(1234)
-    result = transaction.update_credit_card_number(1234)
-    assert_equal 1234, result
-    result = transaction.update_credit_card_expiration_date('0202')
-    assert_equal '0202', result
-    result = transaction.update_result('pending')
-    assert_equal :pending, result
-  end
-
   def test_it_can_return_invoice_for_a_transaction
     se = SalesEngine.new({:items => './test/fixtures/items.csv',
                           :merchants => './test/fixtures/merchants.csv',
@@ -68,7 +58,5 @@ class TransactionTest < Minitest::Test
     transaction = se.transactions.all.first
     result = transaction.invoice
     assert_nil result
-    transaction = se.transactions.all.first
-    assert_nil transaction.invoice
   end
 end

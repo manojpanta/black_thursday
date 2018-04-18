@@ -136,10 +136,10 @@ class SalesAnalyst
 
   def invoice_status(status)
     total_invoices = @invoice_repo.all.count
-    a = @invoice_repo.all.map do |invoice|
+    invoices = @invoice_repo.all.map do |invoice|
       invoice if invoice.status == status
     end.compact.count
-    ((a.to_f / total_invoices) * 100).round(2)
+    ((invoices.to_f / total_invoices) * 100).round(2)
   end
 
   def invoice_paid_in_full?(invoice_id)
