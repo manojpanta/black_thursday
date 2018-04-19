@@ -1,6 +1,4 @@
 module HashRepository
-
-
   def find_by_id(id)
     @models[id]
   end
@@ -23,6 +21,10 @@ module HashRepository
 
   def delete(id)
     @models.delete(id)
+  end
+
+  def find_all_by_invoice_id(id)
+    @invoice_ids[id]
   end
 end
 

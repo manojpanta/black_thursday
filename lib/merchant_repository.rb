@@ -6,13 +6,10 @@ require_relative './module/hash_repository'
 # this is merchant repo class
 class MerchantRepository
   include HashRepository
-  attr_reader :path,
-              :sales_engine
 
   def initialize(path, sales_engine)
     @models         = {}
     @merchant_names = Hash.new { |h, k| h[k] = [] }
-    @path           = path
     @sales_engine   = sales_engine
     load_path(path)
   end
@@ -50,14 +47,14 @@ class MerchantRepository
   end
 
   def invoices_for_merchant(id)
-    sales_engine.invoices_for_merchant(id)
+    @sales_engine.invoices_for_merchant(id)
   end
 
   def items_for_a_merchant(merchant_id)
-    sales_engine.items_for_a_merchant(merchant_id)
+    @sales_engine.items_for_a_merchant(merchant_id)
   end
 
   def find_customers_for_a_merchant(customer_id)
-    sales_engine.find_customers_for_a_merchant(customer_id)
+    @sales_engine.find_customers_for_a_merchant(customer_id)
   end
 end

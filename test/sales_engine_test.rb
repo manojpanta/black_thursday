@@ -186,4 +186,16 @@ class SalesEngineTest<Minitest::Test
     assert_instance_of InvoiceItem, result.first
     assert_equal 1, result.first.id
   end
+
+  def test_it_can_find_items_for_invoice
+    se = SalesEngine.new({:items => './test/fixtures/items.csv',
+                          :merchants => './test/fixtures/merchants.csv',
+                          :invoices => './test/fixtures/invoices.csv',
+                          :invoice_items => './test/fixtures/invoice_items.csv',
+                          :transactions => './test/fixtures/transactions.csv',
+                          :customers => './test/fixtures/customers.csv'
+                          })
+    result = se.find_items_for_a_invoice(263454779)
+    assert_equal 'Gold Clutch with Swarovski Element Crystals', result.name
+  end
 end

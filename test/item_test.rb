@@ -39,7 +39,7 @@ class TestItem < Minitest::Test
                           :invoice_items => './test/fixtures/invoice_items.csv',
                           :transactions => './test/fixtures/transactions.csv',
                           :customers => './test/fixtures/customers.csv' })
-    item = se.items.items.first
+    item = se.items.all.first
     result = item.merchant
     assert_instance_of Merchant, result
     assert_equal 'jejum', result.name

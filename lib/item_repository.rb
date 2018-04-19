@@ -3,12 +3,9 @@ require 'time'
 require 'date'
 require_relative 'item'
 require_relative './module/repository'
-
 # this is item repo
 class ItemRepository
   include Repository
-  attr_reader :items,
-              :sales_engine
 
   def initialize(path, sales_engine)
     @models         = []
@@ -64,7 +61,7 @@ class ItemRepository
   end
 
   def find_merchant_of_a_item(merchant_id)
-    sales_engine.find_merchant_of_a_item(merchant_id)
+    @sales_engine.find_merchant_of_a_item(merchant_id)
   end
 
   def inspect

@@ -14,7 +14,7 @@ class SalesAnalyst
   end
 
   def average_items_per_merchant
-    (@item_repo.items.count.to_f / @merchant_repo.all.count).round(2)
+    (@item_repo.all.count.to_f / @merchant_repo.all.count).round(2)
   end
 
   def average_items_per_merchant_standard_deviation
@@ -46,28 +46,28 @@ class SalesAnalyst
   def average_average_price_per_merchant
     @merchant_repo.all.reduce(0) do |sum, merchant|
       average_price = average_item_price_for_merchant(merchant.id)
-      merchants_count = @merchant_repo.merchants.count
+      merchants_count = @merchant_repo.all.count
       sum + (average_price / merchants_count)
     end.round(2)
   end
 
   def average_price_of_items
-    @item_repo.items.reduce(0) do |total, item|
-      total + item.unit_price / @item_repo.items.count
+    @item_repo.all.reduce(0) do |total, item|
+      total + item.unit_price / @item_repo.all.count
     end.round(2)
   end
 
   def standard_deviation_for_item_price
     average_price = average_price_of_items
-    total = @item_repo.items.reduce(0) do |sum, item|
+    total = @item_repo.all.reduce(0) do |sum, item|
       sum + (item.unit_price - average_price) ** 2
-    end / (@item_repo.items.count - 1)
+    end / (@item_repo.all.count - 1)
     Math.sqrt(total).round(2)
   end
 
   def golden_items
     twostdv = average_price_of_items + (standard_deviation_for_item_price * 2)
-    @item_repo.items.map do |item|
+    @item_repo.all.map do |item|
       item if item.unit_price > twostdv
     end.compact
   end
@@ -82,7 +82,7 @@ class SalesAnalyst
 
   def average_invoices_per_merchant_standard_deviation
     average = average_invoices_per_merchant
-    numbers_of_merchants = @merchant_repo.merchants.count
+    numbers_of_merchants = @merchant_repo.all.count
     total = @merchant_repo.all.reduce(0) do |sum, merchant|
       sum + (merchant.invoices.count - average) ** 2
     end / (numbers_of_merchants - 1)
@@ -106,7 +106,7 @@ class SalesAnalyst
   end
 
   def average_number_of_invoices_per_day
-    @invoice_repo.invoices.count / 7
+    @invoice_repo.all.count / 7
   end
 
   def organize_invoices_by_days_of_the_week

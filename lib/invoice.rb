@@ -33,7 +33,7 @@ class Invoice
   def items
     invoice_items = invoice_repo.find_invoice_item_for_a_invoice(id)
     invoice_items.map do |invoice_item|
-      @invoice_repo.sales_engine.items.find_by_id(invoice_item.item_id)
+      @invoice_repo.find_items_for_a_invoice(invoice_item.item_id)
     end.uniq
   end
 

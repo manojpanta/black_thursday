@@ -5,9 +5,7 @@ require_relative './module/hash_repository'
 # this is invoice repo
 class InvoiceRepository
   include HashRepository
-  attr_reader :path,
-              :sales_engine,
-              :merchant_ids
+  attr_reader :merchant_ids
 
   def initialize(path, sales_engine)
     @sales_engine = sales_engine
@@ -62,19 +60,23 @@ class InvoiceRepository
   end
 
   def find_merchant_for_a_invoice(merchant_id)
-    sales_engine.find_merchant_for_a_invoice(merchant_id)
+    @sales_engine.find_merchant_for_a_invoice(merchant_id)
   end
 
   def find_transactions_for_a_invoice(invoice_id)
-    sales_engine.find_transactions_for_a_invoice(invoice_id)
+    @sales_engine.find_transactions_for_a_invoice(invoice_id)
   end
 
   def find_customer_of_a_invoice(customer_id)
-    sales_engine.find_customer_of_a_invoice(customer_id)
+    @sales_engine.find_customer_of_a_invoice(customer_id)
   end
 
   def find_invoice_item_for_a_invoice(id)
-    sales_engine.find_invoice_item_for_a_invoice(id)
+    @sales_engine.find_invoice_item_for_a_invoice(id)
+  end
+
+  def find_items_for_a_invoice(item_id)
+    @sales_engine.find_items_for_a_invoice(item_id)
   end
 
   def inspect

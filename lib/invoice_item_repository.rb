@@ -1,17 +1,14 @@
 require 'csv'
 require_relative 'invoice_item'
 require_relative './module/hash_repository'
-
 # this is invoice repo
 class InvoiceItemRepository
   include HashRepository
-  attr_reader :invoice_items,
-              :invoice_id
-
+  attr_reader :invoice_ids
   def initialize(path, sales_engine)
     @sales_engine = sales_engine
     @models       = {}
-    @invoice_id   = Hash.new { |h, k| h[k] = [] }
+    @invoice_ids  = Hash.new { |h, k| h[k] = [] }
     load_path(path)
   end
 
@@ -19,7 +16,7 @@ class InvoiceItemRepository
     CSV.foreach(path, headers: true, header_converters: :symbol) do |data|
       invoice_item = InvoiceItem.new(data, self)
       @models[invoice_item.id] = invoice_item
-      @invoice_id[invoice_item.invoice_id] << invoice_item
+      @invoice_ids[invoice_item.invoice_id] << invoice_item
     end
   end
 
@@ -27,10 +24,6 @@ class InvoiceItemRepository
     @models.values.find_all do |item|
       item.item_id == id
     end
-  end
-
-  def find_all_by_invoice_id(id)
-    @invoice_id[id]
   end
 
   def create(attributes)

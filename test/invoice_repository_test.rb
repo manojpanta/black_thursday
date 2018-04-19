@@ -8,12 +8,6 @@ class InvoiceRepositoryTest < Minitest::Test
     assert_instance_of InvoiceRepository, ir
   end
 
-  def test_it_can_have_path
-    ir = InvoiceRepository.new('./test/fixtures/invoices.csv', nil)
-
-    assert_equal './test/fixtures/invoices.csv', ir.path
-  end
-
   def test_invoices_is_a_array
     ir = InvoiceRepository.new('./test/fixtures/invoices.csv', nil)
 

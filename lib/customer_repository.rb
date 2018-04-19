@@ -6,9 +6,6 @@ require_relative './module/repository'
 # this is model repository
 class CustomerRepository
   include Repository
-  attr_reader :path,
-              :models,
-              :sales_engine
 
   def initialize(path, sales_engine)
     @models       = []

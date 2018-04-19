@@ -9,12 +9,6 @@ class TransactionRepositoryTest < Minitest::Test
     assert_instance_of TransactionRepository, tr
   end
 
-  def test_it_can_have_path
-    tr = TransactionRepository.new('./test/fixtures/transactions.csv', nil)
-
-    assert_equal './test/fixtures/transactions.csv', tr.path
-  end
-
   def test_it_can_load_all_transaction_from_csv
     tr = TransactionRepository.new('./test/fixtures/transactions.csv', nil)
 
@@ -90,13 +84,13 @@ class TransactionRepositoryTest < Minitest::Test
 
     result3 = result1.count + result.count
 
-    assert_equal result3, tr.transactions.count
+    assert_equal result3, tr.all.count
   end
 
   def test_it_can_create_new_id
     tr = TransactionRepository.new('./test/fixtures/transactions.csv', nil)
 
-    assert_equal 4985, tr.transactions.count
+    assert_equal 4985, tr.all.count
 
     assert_equal 4986, tr.create_new_id
   end

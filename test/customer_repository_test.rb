@@ -8,16 +8,10 @@ class TransactionRepositoryTest < Minitest::Test
     assert_instance_of CustomerRepository, cr
   end
 
-  def test_it_can_have_path
-    cr = CustomerRepository.new('./test/fixtures/customers.csv', nil)
-
-    assert_equal './test/fixtures/customers.csv', cr.path
-  end
-
   def test_customers_is_an_array
     cr = CustomerRepository.new('./test/fixtures/customers.csv', nil)
 
-    assert_instance_of Array, cr.models
+    assert_instance_of Array, cr.all
   end
 
   def test_it_can_load_all_customers_from_csv
